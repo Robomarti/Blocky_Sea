@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(SeaGeneration))]
+[CustomEditor(typeof(SeaGenerator))]
 public class SeaGeneratorEditor : Editor {
     public override void OnInspectorGUI() {
-        SeaGeneration seaGeneration = (SeaGeneration)target;
+        SeaGenerator seaGeneration = (SeaGenerator)target;
 
         if (DrawDefaultInspector()) {
             if (seaGeneration.autoUpdate) {
