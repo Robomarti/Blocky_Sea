@@ -4,8 +4,8 @@ public class SeaGenerator : MonoBehaviour {
     [SerializeField] private enum DrawMode { Mesh };
     [SerializeField] private DrawMode drawMode;
 
-    [SerializeField] private int mapWidth;
-    [SerializeField] private int mapHeight;
+    private const int seaChunkSize = 241;
+    [Range(0,6)] public int levelOfDetail;
     [SerializeField] private int seed;
     [SerializeField] private float noiseScale;
     [SerializeField] private int octaves;
@@ -13,25 +13,21 @@ public class SeaGenerator : MonoBehaviour {
     [SerializeField] private float lacunarity;
     [SerializeField] private Vector2 offset;
 
+    [SerializeField] private float meshHeightMultiplier;
+
     public bool autoUpdate;
 
     public void GenerateMap() {
-        float[,] noiseMap = Noise.GenerateNoiseMap(mapWidth,mapHeight,seed,noiseScale,octaves,persistence,lacunarity,offset);
+        float[,] noiseMap = Noise.GenerateNoiseMap(seaChunkSize, seaChunkSize, seed, noiseScale, octaves, persistence, lacunarity, offset);
         SeaDisplay displaySea = FindAnyObjectByType<SeaDisplay>();
         if (drawMode == DrawMode.Mesh) {
-            displaySea.DrawMesh(SeaMeshGenerator.GenerateSeaMesh(noiseMap));
+            displaySea.DrawMesh(SeaMeshGenerator.GenerateSeaMesh(noiseMap, meshHeightMultiplier, levelOfDetail));
         } else {
             displaySea.DrawNoiseMap(noiseMap);
         }
     }
 
     private void OnValidate() {
-        if (mapWidth < 1) {
-            mapWidth = 1;
-        }
-        if (mapHeight < 1) {
-            mapHeight = 1;
-        }
         if (lacunarity < 1) {
             lacunarity = 1;
         }
