@@ -10,7 +10,7 @@ public static class SeaMeshGenerator {
         int meshSimplificationIncrement = (levelOfDetail == 0) ? 1 : levelOfDetail*2;
         int verticesPerLine = (width-1)/meshSimplificationIncrement+1;
 
-        MeshData meshData = new MeshData(width,height);
+        MeshData meshData = new MeshData(width, height);
         int vertexIndex = 0;
 
         for (int y=0; y < height; y+=meshSimplificationIncrement) {
@@ -38,7 +38,7 @@ public class MeshData {
 
     private int triangleIndex;
 
-    public MeshData(int meshWidth,int meshHeight) {
+    public MeshData(int meshWidth, int meshHeight) {
         vertices = new Vector3[meshWidth * meshHeight];
         uvs = new Vector2[meshWidth * meshHeight];
         triangles = new int[(meshWidth - 1) * (meshHeight - 1) * 6];

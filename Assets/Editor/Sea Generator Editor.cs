@@ -8,12 +8,12 @@ public class SeaGeneratorEditor : Editor {
 
         if (DrawDefaultInspector()) {
             if (seaGeneration.autoUpdate) {
-                seaGeneration.GenerateMap();
+                seaGeneration.DrawSeaInEditor();
             }
         }
 
         if (GUILayout.Button("Generate sea")) {
-            seaGeneration.GenerateMap();
+            seaGeneration.DrawSeaInEditor();
         }
     }
 }
