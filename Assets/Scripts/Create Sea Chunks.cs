@@ -66,7 +66,7 @@ public class CreateSeaChunks : MonoBehaviour
             meshObject.transform.position = chunkPosition;
             meshObject.transform.parent = parent;
 
-            seaGenerator.RequestSeaData(OnSeaDataReceived);
+            seaGenerator.RequestSeaData(OnSeaDataReceived, position);
         }
 
         private void OnSeaDataReceived(SeaData seaData) {

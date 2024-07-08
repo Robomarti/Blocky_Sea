@@ -24,7 +24,7 @@ public class SeaGenerator : MonoBehaviour {
     private Queue<SeaThreadInfo<MeshData>> meshDataThreadInfoQueue = new Queue<SeaThreadInfo<MeshData>>();
 
     public void DrawSeaInEditor() {
-        SeaData seaData = GenerateSeaData();
+        SeaData seaData = GenerateSeaData(Vector2.zero);
 
         SeaDisplay seaDisplay = FindAnyObjectByType<SeaDisplay>();
         if (drawMode == DrawMode.Mesh) {
@@ -34,16 +34,16 @@ public class SeaGenerator : MonoBehaviour {
         }
     }
 
-    public void RequestSeaData(Action<SeaData> callback) {
+    public void RequestSeaData(Action<SeaData> callback, Vector2 center) {
         ThreadStart threadStart = delegate {
-            SeaDataThread(callback);
+            SeaDataThread(callback, center);
         };
 
         new Thread(threadStart).Start();
     }
 
-    private void SeaDataThread(Action<SeaData> callback) {
-        SeaData seaData = GenerateSeaData();
+    private void SeaDataThread(Action<SeaData> callback, Vector2 center) {
+        SeaData seaData = GenerateSeaData(center);
         lock(seaDataThreadInfoQueue) {
             seaDataThreadInfoQueue.Enqueue(new SeaThreadInfo<SeaData>(callback, seaData));
         }
@@ -79,8 +79,8 @@ public class SeaGenerator : MonoBehaviour {
         }
     }
 
-    private SeaData GenerateSeaData() {
-        float[,] noiseMap = Noise.GenerateNoiseMap(seaChunkSize, seed, noiseScale, octaves, persistence, lacunarity, offset);
+    private SeaData GenerateSeaData(Vector2 center) {
+        float[,] noiseMap = Noise.GenerateNoiseMap(seaChunkSize, seed, noiseScale, octaves, persistence, lacunarity, center + offset);
         return new SeaData(noiseMap);
     }
 
