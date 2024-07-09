@@ -9,6 +9,7 @@ public class CreateSeaChunks : MonoBehaviour
     public static Vector2 viewerPosition;
     private int chunkSize;
     private int chunksVisibleInViewDistance;
+    private const float scale = 1f;
 
     static SeaGenerator seaGenerator;
 
@@ -17,7 +18,7 @@ public class CreateSeaChunks : MonoBehaviour
         maxViewDistance = detailLevels[detailLevels.Length-1].visibleDistanceThreshold;
         chunkSize = SeaGenerator.seaChunkSize-1;
         chunksVisibleInViewDistance = Mathf.RoundToInt(maxViewDistance / chunkSize);
-        viewerPosition = new Vector2(viewer.position.x,viewer.position.z);
+        viewerPosition = new Vector2(viewer.position.x,viewer.position.z) / scale;
         CreateVisibleChunks();
     }
 
@@ -44,7 +45,6 @@ public class CreateSeaChunks : MonoBehaviour
         public SeaChunk(Vector2 coordinates, int size, Transform parent, Material material, LevelOfDetailInfo[] detailLevels) {
             position = coordinates * size;
             bounds = new Bounds(position,Vector2.one * size);
-            Vector3 chunkPosition = new Vector3(position.x, 0, position.y);
 
             float viewerDistanceFromNearestEdge = Mathf.Sqrt(bounds.SqrDistance(viewerPosition));
 
@@ -63,8 +63,9 @@ public class CreateSeaChunks : MonoBehaviour
             meshRenderer = meshObject.AddComponent<MeshRenderer>();
             meshFilter = meshObject.AddComponent<MeshFilter>();
             meshRenderer.material = material;
-            meshObject.transform.position = chunkPosition;
+            meshObject.transform.position = new Vector3(position.x, 0, position.y) * scale;
             meshObject.transform.parent = parent;
+            meshObject.transform.localScale = Vector3.one * scale;
 
             seaGenerator.RequestSeaData(OnSeaDataReceived, position);
         }
