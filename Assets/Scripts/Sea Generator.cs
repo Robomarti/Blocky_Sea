@@ -35,7 +35,7 @@ public class SeaGenerator : MonoBehaviour {
 
         SeaDisplay seaDisplay = FindAnyObjectByType<SeaDisplay>();
         if (drawMode == DrawMode.Mesh) {
-            seaDisplay.DrawMesh(SeaMeshGenerator.GenerateSeaMesh(seaData.heightMap, meshHeightMultiplier, EditorPreviewLevelOfDetail));
+            seaDisplay.DrawMesh(SeaMeshGenerator.GenerateSeaMesh(seaData.heightMap.GetLength(0), EditorPreviewLevelOfDetail));
         } else {
             seaDisplay.DrawNoiseMap(seaData.heightMap);
         }
@@ -65,7 +65,7 @@ public class SeaGenerator : MonoBehaviour {
     }
 
     private void MeshDataThread(SeaData seaData, Action<MeshData> callback, int levelOfDetail) {
-        MeshData meshData = SeaMeshGenerator.GenerateSeaMesh(seaData.heightMap, meshHeightMultiplier, levelOfDetail);
+        MeshData meshData = SeaMeshGenerator.GenerateSeaMesh(seaData.heightMap.GetLength(0), levelOfDetail);
         lock (meshDataThreadInfoQueue) {
             meshDataThreadInfoQueue.Enqueue(new SeaThreadInfo<MeshData>(callback, meshData));
         }

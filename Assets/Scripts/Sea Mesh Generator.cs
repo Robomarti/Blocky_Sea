@@ -1,29 +1,27 @@
 using UnityEngine;
 
 public static class SeaMeshGenerator {
-    public static MeshData GenerateSeaMesh(float[,] heightMap, float heightMultiplier, int levelOfDetail) {
-        int width = heightMap.GetLength(0);
-        int height = heightMap.GetLength(1);
-        float topLeftX = (width - 1) / -2f;
-        float topLeftZ = (height - 1) / 2f;
+    public static MeshData GenerateSeaMesh(int mapWidthHeight, int levelOfDetail) {
+        float topLeftX = (mapWidthHeight - 1) / -2f;
+        float topLeftZ = (mapWidthHeight - 1) / 2f;
 
-        //lod can't be 5 due to ChunkSize values not being divisible by 10
+        //lod can't be 5 due to most ChunkSize values not being divisible by 10
         if (levelOfDetail == 5) {
             levelOfDetail = 6;
         }
         int meshSimplificationIncrement = (levelOfDetail == 0) ? 1 : levelOfDetail * 2;
-        int verticesPerLine = (width - 1) / meshSimplificationIncrement + 1;
+        int verticesPerLine = (mapWidthHeight - 1) / meshSimplificationIncrement + 1;
 
         MeshData meshData = new MeshData(verticesPerLine);
         int vertexIndex = 0;
 
         //lower vertices
-        for (int y = 0; y < height; y += meshSimplificationIncrement) {
-            for (int x = 0; x < width; x += meshSimplificationIncrement) {
+        for (int y = 0; y < mapWidthHeight; y += meshSimplificationIncrement) {
+            for (int x = 0; x < mapWidthHeight; x += meshSimplificationIncrement) {
                 meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, 0, topLeftZ - y);
-                meshData.uvs[vertexIndex] = new Vector2(x / (float)width, y / (float)height);
+                meshData.uvs[vertexIndex] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
 
-                if (x < width - 1 && y < height - 1) {
+                if (x < mapWidthHeight - 1 && y < mapWidthHeight - 1) {
                     meshData.AddTriangle(vertexIndex, vertexIndex + verticesPerLine + 1, vertexIndex + verticesPerLine);
                     meshData.AddTriangle(vertexIndex + verticesPerLine + 1, vertexIndex, vertexIndex + 1);
                 }
@@ -35,12 +33,12 @@ public static class SeaMeshGenerator {
         int lowerVerticesLastIndex = vertexIndex;
 
         //upper vertices
-        for (int y=0; y < height; y += meshSimplificationIncrement) {
-            for (int x=0; x < width; x += meshSimplificationIncrement) {
+        for (int y=0; y < mapWidthHeight; y += meshSimplificationIncrement) {
+            for (int x=0; x < mapWidthHeight; x += meshSimplificationIncrement) {
                 meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, 10, topLeftZ - y);
-                meshData.uvs[vertexIndex] = new Vector2(x / (float)width, y / (float)height);
+                meshData.uvs[vertexIndex] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
 
-                if (x < width - 1 && y < height - 1) {
+                if (x < mapWidthHeight - 1 && y < mapWidthHeight - 1) {
                     meshData.AddTriangle(vertexIndex, vertexIndex + verticesPerLine + 1, vertexIndex + verticesPerLine);
                     meshData.AddTriangle(vertexIndex + verticesPerLine + 1, vertexIndex, vertexIndex + 1);
                 }
