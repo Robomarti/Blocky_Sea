@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class SeaGenerator : MonoBehaviour {
     [SerializeField] private enum DrawMode { Mesh };
     [SerializeField] private DrawMode drawMode;
+    [SerializeField] private Noise.NormalizeMode normalizeMode;
 
     public const int seaChunkSize = 241;
     [Range(0,6)] public int EditorPreviewLevelOfDetail;
@@ -80,7 +81,7 @@ public class SeaGenerator : MonoBehaviour {
     }
 
     private SeaData GenerateSeaData(Vector2 center) {
-        float[,] noiseMap = Noise.GenerateNoiseMap(seaChunkSize, seed, noiseScale, octaves, persistence, lacunarity, center + offset);
+        float[,] noiseMap = Noise.GenerateNoiseMap(seaChunkSize, seed, noiseScale, octaves, persistence, lacunarity, center + offset, normalizeMode);
         return new SeaData(noiseMap);
     }
 
