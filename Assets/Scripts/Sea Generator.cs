@@ -7,8 +7,19 @@ public class SeaGenerator : MonoBehaviour {
     [SerializeField] private enum DrawMode { Mesh };
     [SerializeField] private DrawMode drawMode;
     [SerializeField] private Noise.NormalizeMode normalizeMode;
-
-    public const int seaChunkSize = 241;
+    public enum ChunkSize {
+        _48 = 49,
+        _72 = 73,
+        _96 = 97,
+        _120 = 121,
+        _144 = 145,
+        _168 = 169,
+        _192 = 193,
+        _216 = 217,
+        _240 = 241
+    }
+    [Tooltip("168 is currently the largest value that generates a correct mesh")] [SerializeField] private ChunkSize chunkSize;
+    public static int seaChunkSize;
     [Range(0,6)] public int EditorPreviewLevelOfDetail;
     [SerializeField] private int seed;
     [SerializeField] private float noiseScale;
@@ -16,9 +27,7 @@ public class SeaGenerator : MonoBehaviour {
     [Range(0,1)] [SerializeField] private float persistence;
     [SerializeField] private float lacunarity;
     [SerializeField] private Vector2 offset;
-
     [SerializeField] private float meshHeightMultiplier;
-
     public bool autoUpdate;
 
     private Queue<SeaThreadInfo<SeaData>> seaDataThreadInfoQueue = new Queue<SeaThreadInfo<SeaData>>();
@@ -81,6 +90,7 @@ public class SeaGenerator : MonoBehaviour {
     }
 
     private SeaData GenerateSeaData(Vector2 center) {
+        seaChunkSize = (int)chunkSize;
         float[,] noiseMap = Noise.GenerateNoiseMap(seaChunkSize, seed, noiseScale, octaves, persistence, lacunarity, center + offset, normalizeMode);
         return new SeaData(noiseMap);
     }
