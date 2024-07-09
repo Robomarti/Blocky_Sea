@@ -14,11 +14,8 @@ public class SeaGenerator : MonoBehaviour {
         _120 = 121,
         _144 = 145,
         _168 = 169,
-        _192 = 193,
-        _216 = 217,
-        _240 = 241
     }
-    [Tooltip("168 is currently the largest value that generates a correct mesh")] [SerializeField] private ChunkSize chunkSize;
+    [SerializeField] private ChunkSize chunkSize;
     public static int seaChunkSize;
     [Range(0,6)] public int EditorPreviewLevelOfDetail;
     [SerializeField] private int seed;

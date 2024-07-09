@@ -1,5 +1,3 @@
-
-
 using UnityEngine;
 
 public static class SeaMeshGenerator {
@@ -9,6 +7,10 @@ public static class SeaMeshGenerator {
         float topLeftX = (width - 1) / -2f;
         float topLeftZ = (height - 1) / 2f;
 
+        //lod can't be 5 due to ChunkSize values not being divisible by 10
+        if (levelOfDetail == 5) {
+            levelOfDetail = 6;
+        }
         int meshSimplificationIncrement = (levelOfDetail == 0) ? 1 : levelOfDetail * 2;
         int verticesPerLine = (width - 1) / meshSimplificationIncrement + 1;
 
