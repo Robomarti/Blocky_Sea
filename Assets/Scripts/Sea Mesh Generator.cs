@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -46,14 +47,33 @@ public static class SeaMeshGenerator {
 
                 // Ensure we are not on the lower or right border before adding triangles
                 if (x < mapWidthHeight - 1 && y < mapWidthHeight - 1) {
+                    int correspondingLowerLayerVertexIndex = (int)MathF.Floor((vertexIndex - firstUpperLayerVertexIndex) / 2);
+
                     int topNorth = vertexIndex;
                     int topEast = vertexIndex + 1;
                     int topSouth = upperLayerVerticesPerLine + vertexIndex + 1;
                     int topWest = upperLayerVerticesPerLine + vertexIndex;
 
+                    int lowNorth = correspondingLowerLayerVertexIndex;
+                    int lowEast = correspondingLowerLayerVertexIndex + 1;
+                    int lowSouth = verticesPerLine + correspondingLowerLayerVertexIndex + 1;
+                    int lowWest = verticesPerLine + correspondingLowerLayerVertexIndex;
+
                     //top triangles
                     meshData.AddTriangle(topNorth, topSouth, topWest);
                     meshData.AddTriangle(topSouth, topNorth, topEast);
+
+                    //northwest triangles
+                    meshData.AddTriangle(topNorth, lowWest, lowNorth);
+                    meshData.AddTriangle(lowWest, topNorth, topWest);
+
+                    //southeast triangles
+                    meshData.AddTriangle(topSouth, lowEast, lowSouth);
+                    meshData.AddTriangle(lowEast, topSouth, topEast);
+
+                    //southwest triangles
+                    meshData.AddTriangle(topWest, lowSouth, lowWest);
+                    meshData.AddTriangle(lowSouth, topWest, topSouth);
                 }
 
                 vertexIndex += 1;
