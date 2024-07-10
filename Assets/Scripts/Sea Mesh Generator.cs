@@ -33,7 +33,10 @@ public static class SeaMeshGenerator {
         }
 
         int firstUpperLayerVertexIndex = vertexIndex;
+        meshData.firstUpperLayerVertexIndex = firstUpperLayerVertexIndex;
+
         int upperLayerVerticesPerLine = verticesPerLine * 2;
+        meshData.upperLayerVerticesPerLine = upperLayerVerticesPerLine;
 
         // Upper vertices
         for (int y = 0; y < mapWidthHeight; y += meshSimplificationIncrement) {
@@ -63,6 +66,10 @@ public static class SeaMeshGenerator {
                     meshData.AddTriangle(topNorth, topSouth, topWest);
                     meshData.AddTriangle(topSouth, topNorth, topEast);
 
+                    //northeast triangles
+                    meshData.AddTriangle(topEast, lowNorth, lowEast);
+                    meshData.AddTriangle(lowNorth, topEast, topNorth);
+
                     //northwest triangles
                     meshData.AddTriangle(topNorth, lowWest, lowNorth);
                     meshData.AddTriangle(lowWest, topNorth, topWest);
@@ -90,6 +97,9 @@ public class MeshData {
     public int[] triangles;
     private int triangleIndex;
 
+    public int firstUpperLayerVertexIndex;
+    public int upperLayerVerticesPerLine;
+
     public MeshData(int verticesPerLine) {
         // we generate upper vertices on top of the regular vertices, and upper layer has twice the amout of vertices to keep each quad completely independent
         // we generate useless additional vertices for corner and edge parts of the mesh because coding hard :(.
@@ -101,7 +111,7 @@ public class MeshData {
         triangles = new int[trianglesToAllocate];
     }
 
-    public void AddTriangle(int a,int b,int c) {
+    public void AddTriangle(int a, int b, int c) {
         triangles[triangleIndex] = a;
         triangles[triangleIndex + 1] = b;
         triangles[triangleIndex + 2] = c;
