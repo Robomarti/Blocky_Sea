@@ -14,93 +14,87 @@ public static class SeaMeshGenerator {
         int verticesPerLine = (mapWidthHeight - 1) / meshSimplificationIncrement + 1;
 
         MeshData meshData = new MeshData(verticesPerLine);
-        int lowerLayerVertexIndex = 0;
+        int vertexIndex = 0;
 
         //lower vertices
         for (int y = 0; y < mapWidthHeight; y += meshSimplificationIncrement) {
             for (int x = 0; x < mapWidthHeight; x += meshSimplificationIncrement) {
-                meshData.lowerLayerVertices[lowerLayerVertexIndex] = new Vector3(topLeftX + x, 0, topLeftZ - y);
-                meshData.lowerLayerUVs[lowerLayerVertexIndex] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
+                meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, 0, topLeftZ - y);
+                meshData.uvs[vertexIndex] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
 
                 if (x < mapWidthHeight - 1 && y < mapWidthHeight - 1) {
-                    meshData.AddLowerTriangle(lowerLayerVertexIndex, verticesPerLine + lowerLayerVertexIndex + 1, verticesPerLine + lowerLayerVertexIndex);
-                    meshData.AddLowerTriangle(verticesPerLine + lowerLayerVertexIndex + 1, lowerLayerVertexIndex, lowerLayerVertexIndex + 1);
+                    meshData.AddTriangle(vertexIndex, verticesPerLine + vertexIndex + 1, verticesPerLine + vertexIndex);
+                    meshData.AddTriangle(verticesPerLine + vertexIndex + 1, vertexIndex, vertexIndex + 1);
                 }
 
-                lowerLayerVertexIndex += 1;
+                vertexIndex += 1;
             }
         }
 
-        int upperLayerVertexIndex = 0;
-        //upper vertices
+        // Upper vertices
         for (int y = 0; y < mapWidthHeight; y += meshSimplificationIncrement) {
             for (int x = 0; x < mapWidthHeight; x += meshSimplificationIncrement) {
-                meshData.upperLayerVertices[upperLayerVertexIndex] = new Vector3(topLeftX + x, 10, topLeftZ - y);
-                meshData.upperLayerUVs[upperLayerVertexIndex] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
+                meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, 10, topLeftZ - y);
+                meshData.uvs[vertexIndex] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
 
+                // Ensure we are not on the border before adding triangles
                 if (x < mapWidthHeight - 1 && y < mapWidthHeight - 1) {
-                    meshData.AddUpperTriangle(upperLayerVertexIndex, verticesPerLine + upperLayerVertexIndex + 1, verticesPerLine + upperLayerVertexIndex);
-                    meshData.AddUpperTriangle(verticesPerLine + upperLayerVertexIndex + 1, upperLayerVertexIndex, upperLayerVertexIndex + 1);
-                        // also create additional vertex
-                        if (x > 0 && y > 0) {
-                            upperLayerVertexIndex += 1;
-                            meshData.upperLayerVertices[upperLayerVertexIndex] = new Vector3(topLeftX + x, 10, topLeftZ - y);
-                            meshData.upperLayerUVs[upperLayerVertexIndex] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
-                        }
+                    // Adjust vertex index for center parts
+                    int adjustedVerticesPerLine = verticesPerLine;
+                    // Create additional vertex in the center parts
+                    if (x > 0 && y > 0) {
+                        //adjustedVerticesPerLine = verticesPerLine + (verticesPerLine - 2);
+                        vertexIndex += 1;
+                        meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, 10, topLeftZ - y);
+                        meshData.uvs[vertexIndex] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
+                    }
+
+                    meshData.AddTriangle(vertexIndex, adjustedVerticesPerLine + vertexIndex + 1, adjustedVerticesPerLine + vertexIndex);
+                    meshData.AddTriangle(adjustedVerticesPerLine + vertexIndex + 1, vertexIndex, vertexIndex + 1);
                 }
 
-                upperLayerVertexIndex += 1;
+                vertexIndex += 1;
             }
         }
-
+        Debug.Log(vertexIndex);
+        Debug.Log(verticesPerLine);
         return meshData;
     }
 }
 
 public class MeshData {
-    public Vector3[] lowerLayerVertices;
-    public Vector2[] lowerLayerUVs;
-    public int[] lowerLayerTriangles;
-    private int lowerLayerTriangleIndex;
-
-    public Vector3[] upperLayerVertices;
-    public Vector2[] upperLayerUVs;
-    public int[] upperLayerTriangles;
-    private int upperLayerTriangleIndex;
+    public Vector3[] vertices;
+    public Vector2[] uvs;
+    public int[] triangles;
+    private int triangleIndex;
 
     public MeshData(int verticesPerLine) {
         // we generate upper vertices on top of the regular vertices, and upper layer has almost twice the amout of vertices to keep each quad completely independent
         // we dont generate additional vertices for corner and edge parts of the mesh.
-        lowerLayerVertices = new Vector3[verticesPerLine * verticesPerLine];
-        lowerLayerUVs = new Vector2[verticesPerLine * verticesPerLine];
-        lowerLayerTriangles = new int[(verticesPerLine - 1) * (verticesPerLine - 1) * 6];
+        int spaceToAllocate = verticesPerLine * verticesPerLine + (verticesPerLine * verticesPerLine + (verticesPerLine-2) * (verticesPerLine-2));
+        vertices = new Vector3[spaceToAllocate];
+        uvs = new Vector2[spaceToAllocate];
+        int trianglesToAllocate = (verticesPerLine - 1) * (verticesPerLine - 1) * 6 + (((verticesPerLine - 1) * (verticesPerLine - 1) + (verticesPerLine-2) * (verticesPerLine-2)) * 6);
+        triangles = new int[trianglesToAllocate];
 
-        upperLayerVertices = new Vector3[verticesPerLine * verticesPerLine + (verticesPerLine-2) * (verticesPerLine-2)];
-        upperLayerUVs = new Vector2[verticesPerLine * verticesPerLine + (verticesPerLine-2) * (verticesPerLine-2)];
-        upperLayerTriangles = new int[((verticesPerLine - 1) * (verticesPerLine - 1) + (verticesPerLine-2) * (verticesPerLine-2)) * 6];
+        //upperLayerVertices = new Vector3[verticesPerLine * verticesPerLine + (verticesPerLine-2) * (verticesPerLine-2)];
+        //upperLayerUVs = new Vector2[verticesPerLine * verticesPerLine + (verticesPerLine-2) * (verticesPerLine-2)];
+        //upperLayerTriangles = new int[((verticesPerLine - 1) * (verticesPerLine - 1) + (verticesPerLine-2) * (verticesPerLine-2)) * 6];
     }
 
-    public void AddLowerTriangle(int a,int b,int c) {
-        lowerLayerTriangles[lowerLayerTriangleIndex] = a;
-        lowerLayerTriangles[lowerLayerTriangleIndex + 1] = b;
-        lowerLayerTriangles[lowerLayerTriangleIndex + 2] = c;
+    public void AddTriangle(int a,int b,int c) {
+        triangles[triangleIndex] = a;
+        triangles[triangleIndex + 1] = b;
+        triangles[triangleIndex + 2] = c;
 
-        lowerLayerTriangleIndex += 3;
-    }
-
-    public void AddUpperTriangle(int a,int b,int c) {
-        lowerLayerTriangles[upperLayerTriangleIndex] = a;
-        lowerLayerTriangles[upperLayerTriangleIndex + 1] = b;
-        lowerLayerTriangles[upperLayerTriangleIndex + 2] = c;
-
-        upperLayerTriangleIndex += 3;
+        triangleIndex += 3;
     }
 
     public Mesh CreateMesh() {
         Mesh mesh = new Mesh();
-        mesh.vertices = lowerLayerVertices.Concat(upperLayerVertices).ToArray();
-        mesh.uv = lowerLayerUVs.Concat(upperLayerUVs).ToArray();
-        mesh.triangles = lowerLayerTriangles.Concat(upperLayerTriangles).ToArray();
+        mesh.vertices = vertices;
+        mesh.uv = uvs;
+        mesh.triangles = triangles;
         mesh.RecalculateNormals();
         return mesh;
     }
