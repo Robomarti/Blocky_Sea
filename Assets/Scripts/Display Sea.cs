@@ -22,7 +22,6 @@ public class DisplaySea : MonoBehaviour {
         texture.Apply();
 
         textureRenderer.sharedMaterial.mainTexture = texture;
-        textureRenderer.transform.localScale = new Vector3(width,1,height);
     }
 
     public void DrawMesh(MeshData meshData) {

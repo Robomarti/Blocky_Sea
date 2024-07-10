@@ -4,7 +4,7 @@ using System.Threading;
 using System.Collections.Generic;
 
 public class SeaGenerator : MonoBehaviour {
-    [SerializeField] private enum DrawMode { Mesh };
+    [SerializeField] private enum DrawMode { Mesh, HeightMap };
     [SerializeField] private DrawMode drawMode;
     [SerializeField] private Noise.NormalizeMode normalizeMode;
     public enum ChunkSize {
@@ -33,11 +33,11 @@ public class SeaGenerator : MonoBehaviour {
     public void DrawSeaInEditor() {
         SeaData seaData = GenerateSeaData(Vector2.zero);
 
-        SeaDisplay seaDisplay = FindAnyObjectByType<SeaDisplay>();
+        DisplaySea displaySea = FindAnyObjectByType<DisplaySea>();
         if (drawMode == DrawMode.Mesh) {
-            seaDisplay.DrawMesh(SeaMeshGenerator.GenerateSeaMesh(seaData.heightMap.GetLength(0), EditorPreviewLevelOfDetail));
+            displaySea.DrawMesh(SeaMeshGenerator.GenerateSeaMesh(seaData.heightMap.GetLength(0), EditorPreviewLevelOfDetail));
         } else {
-            seaDisplay.DrawNoiseMap(seaData.heightMap);
+            displaySea.DrawNoiseMap(seaData.heightMap);
         }
     }
 
