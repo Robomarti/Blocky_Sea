@@ -27,54 +27,54 @@ public class SeaGenerator : MonoBehaviour {
     [SerializeField] private float meshHeightMultiplier;
     public bool autoUpdate;
 
-    private Queue<SeaThreadInfo<SeaData>> seaDataThreadInfoQueue = new Queue<SeaThreadInfo<SeaData>>();
+    private Queue<SeaThreadInfo<float[,]>> heightMapThreadInfoQueue = new Queue<SeaThreadInfo<float[,]>>();
     private Queue<SeaThreadInfo<MeshData>> meshDataThreadInfoQueue = new Queue<SeaThreadInfo<MeshData>>();
 
     public void DrawSeaInEditor() {
-        SeaData seaData = GenerateSeaData(Vector2.zero);
+        float[,] heightMap = GenerateHeightMap(Vector2.zero);
 
         DisplaySea displaySea = FindAnyObjectByType<DisplaySea>();
         if (drawMode == DrawMode.Mesh) {
-            displaySea.DrawMesh(SeaMeshGenerator.GenerateSeaMesh(seaData.heightMap.GetLength(0), EditorPreviewLevelOfDetail));
+            displaySea.DrawMesh(SeaMeshGenerator.GenerateSeaMesh(heightMap.GetLength(0), EditorPreviewLevelOfDetail));
         } else {
-            displaySea.DrawNoiseMap(seaData.heightMap);
+            displaySea.DrawNoiseMap(heightMap);
         }
     }
 
-    public void RequestSeaData(Action<SeaData> callback, Vector2 center) {
+    public void RequestHeightMap(Action<float[,]> callback, Vector2 center) {
         ThreadStart threadStart = delegate {
-            SeaDataThread(callback, center);
+            heightMapThread(callback, center);
         };
 
         new Thread(threadStart).Start();
     }
 
-    private void SeaDataThread(Action<SeaData> callback, Vector2 center) {
-        SeaData seaData = GenerateSeaData(center);
-        lock(seaDataThreadInfoQueue) {
-            seaDataThreadInfoQueue.Enqueue(new SeaThreadInfo<SeaData>(callback, seaData));
+    private void heightMapThread(Action<float[,]> callback, Vector2 center) {
+        float[,] heightMap = GenerateHeightMap(center);
+        lock(heightMapThreadInfoQueue) {
+            heightMapThreadInfoQueue.Enqueue(new SeaThreadInfo<float[,]>(callback, heightMap));
         }
     }
 
-    public void RequestMeshData(SeaData seaData, Action<MeshData> callback, int levelOfDetail) {
+    public void RequestMeshData(float[,] heightMap, Action<MeshData> callback, int levelOfDetail) {
         ThreadStart threadStart = delegate {
-            MeshDataThread(seaData, callback, levelOfDetail);
+            MeshDataThread(heightMap, callback, levelOfDetail);
         };
 
         new Thread(threadStart).Start();
     }
 
-    private void MeshDataThread(SeaData seaData, Action<MeshData> callback, int levelOfDetail) {
-        MeshData meshData = SeaMeshGenerator.GenerateSeaMesh(seaData.heightMap.GetLength(0), levelOfDetail);
+    private void MeshDataThread(float[,] heightMap, Action<MeshData> callback, int levelOfDetail) {
+        MeshData meshData = SeaMeshGenerator.GenerateSeaMesh(heightMap.GetLength(0), levelOfDetail);
         lock (meshDataThreadInfoQueue) {
             meshDataThreadInfoQueue.Enqueue(new SeaThreadInfo<MeshData>(callback, meshData));
         }
     }
 
     private void Update(){
-        if (seaDataThreadInfoQueue.Count > 0) {
-            for (int i = 0; i < seaDataThreadInfoQueue.Count; i++) {
-                SeaThreadInfo<SeaData> threadInfo = seaDataThreadInfoQueue.Dequeue();
+        if (heightMapThreadInfoQueue.Count > 0) {
+            for (int i = 0; i < heightMapThreadInfoQueue.Count; i++) {
+                SeaThreadInfo<float[,]> threadInfo = heightMapThreadInfoQueue.Dequeue();
                 threadInfo.callback(threadInfo.parameter);
             }
         }
@@ -86,10 +86,10 @@ public class SeaGenerator : MonoBehaviour {
         }
     }
 
-    private SeaData GenerateSeaData(Vector2 center) {
+    private float[,] GenerateHeightMap(Vector2 center) {
         seaChunkSize = (int)chunkSize;
         float[,] noiseMap = Noise.GenerateNoiseMap(seaChunkSize, seed, noiseScale, octaves, persistence, lacunarity, center + offset, normalizeMode);
-        return new SeaData(noiseMap);
+        return noiseMap;
     }
 
     private void OnValidate() {
@@ -109,13 +109,5 @@ public class SeaGenerator : MonoBehaviour {
             this.callback = callback;
             this.parameter = parameter;
         }
-    }
-}
-
-public readonly struct SeaData {
-    public readonly float[,] heightMap;
-
-    public SeaData(float[,] heightMap) {
-        this.heightMap = heightMap;
     }
 }
