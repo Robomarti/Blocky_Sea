@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SeaDisplay : MonoBehaviour {
+public class DisplaySea : MonoBehaviour {
     [SerializeField] private Renderer textureRenderer;
     public MeshFilter meshFilter;
     public MeshRenderer meshRenderer;
