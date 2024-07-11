@@ -71,8 +71,8 @@ public static class SeaMeshGenerator {
 
                     int lowNorth = correspondingLowerLayerVertexIndex;
                     int lowEast = correspondingLowerLayerVertexIndex + 1;
-                    int lowSouth = verticesPerLine + correspondingLowerLayerVertexIndex + 1;
                     int lowWest = verticesPerLine + correspondingLowerLayerVertexIndex;
+                    int lowSouth = verticesPerLine + correspondingLowerLayerVertexIndex + 1;
 
                     // Top triangles
                     meshData.AddTriangle(topNorth, topSouth, topWest);

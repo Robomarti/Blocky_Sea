@@ -7,12 +7,14 @@ public static class AnimateSea
         int firstUpperLayerVertexIndex = meshData.firstUpperLayerVertexIndex;
         int upperLayerVerticesPerLine = meshData.upperLayerVerticesPerLine;
 
-        //meshData.vertices[firstUpperLayerVertexIndex].y = 20;
-        //meshData.vertices[firstUpperLayerVertexIndex+2].y = 20;
+        //meshData.vertices[firstUpperLayerVertexIndex+3].y = 20;
+        //meshData.vertices[firstUpperLayerVertexIndex+6].y = 20;
+        //meshData.vertices[upperLayerVerticesPerLine + firstUpperLayerVertexIndex + 1].y = 20;
+        //meshData.vertices[upperLayerVerticesPerLine + firstUpperLayerVertexIndex + 4].y = 20;
 
         for (int vertexIndex = firstUpperLayerVertexIndex; vertexIndex < verticesLength; vertexIndex += 4) {
             // Ensure we are not on the lower or right border before moving triangles
-            if (vertexIndex < verticesLength - upperLayerVerticesPerLine) {
+            if (vertexIndex < verticesLength - upperLayerVerticesPerLine - 4) {
 
                 int topNorth = vertexIndex + 3;
                 int topEast = vertexIndex + 6;
@@ -23,8 +25,8 @@ public static class AnimateSea
 
                 meshData.vertices[topNorth].y = quadHeight;
                 meshData.vertices[topEast].y = quadHeight;
-                meshData.vertices[topSouth].y = quadHeight;
                 meshData.vertices[topWest].y = quadHeight;
+                meshData.vertices[topSouth].y = quadHeight;
             }
         }
     }
