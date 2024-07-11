@@ -6,8 +6,8 @@ public static class AnimateSea
         int firstUpperLayerVertexIndex = meshData.firstUpperLayerVertexIndex;
         int upperLayerVerticesPerLine = meshData.upperLayerVerticesPerLine;
 
-        meshData.vertices[firstUpperLayerVertexIndex].y = 20;
-        meshData.vertices[firstUpperLayerVertexIndex+2].y = 20;
+        //meshData.vertices[firstUpperLayerVertexIndex].y = 20;
+        //meshData.vertices[firstUpperLayerVertexIndex+2].y = 20;
 
         int vertexCount = 1;
         for (int y = 0; y < upperLayerVerticesPerLine; y += 2) {

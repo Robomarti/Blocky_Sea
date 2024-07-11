@@ -39,7 +39,19 @@ public static class SeaMeshGenerator {
         meshData.upperLayerVerticesPerLine = upperLayerVerticesPerLine;
 
         // Upper vertices
-        for (int y = 0; y < mapWidthHeight; y += meshSimplificationIncrement) {
+        for (int y = 0; y < mapWidthHeight; y += meshSimplificationIncrement) {            
+            // add another row for previous rows triangles to connect to
+            for (int x = 0; x < mapWidthHeight; x += meshSimplificationIncrement) {
+                meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, 10, topLeftZ - y);
+                meshData.uvs[vertexIndex] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
+    
+                vertexIndex += 1;
+                meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, 10, topLeftZ - y);
+                meshData.uvs[vertexIndex] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
+    
+                vertexIndex += 1;
+            }
+
             for (int x = 0; x < mapWidthHeight; x += meshSimplificationIncrement) {
                 meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, 10, topLeftZ - y);
                 meshData.uvs[vertexIndex] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
@@ -67,20 +79,20 @@ public static class SeaMeshGenerator {
                     meshData.AddTriangle(topSouth, topNorth, topEast);
 
                     //northeast triangles
-                    meshData.AddTriangle(topEast, lowNorth, lowEast);
-                    meshData.AddTriangle(lowNorth, topEast, topNorth);
+                    //meshData.AddTriangle(topEast, lowNorth, lowEast);
+                    //meshData.AddTriangle(lowNorth, topEast, topNorth);
 
                     //northwest triangles
-                    meshData.AddTriangle(topNorth, lowWest, lowNorth);
-                    meshData.AddTriangle(lowWest, topNorth, topWest);
+                    //meshData.AddTriangle(topNorth, lowWest, lowNorth);
+                    //meshData.AddTriangle(lowWest, topNorth, topWest);
 
                     //southeast triangles
-                    meshData.AddTriangle(topSouth, lowEast, lowSouth);
-                    meshData.AddTriangle(lowEast, topSouth, topEast);
+                    //meshData.AddTriangle(topSouth, lowEast, lowSouth);
+                    //meshData.AddTriangle(lowEast, topSouth, topEast);
 
                     //southwest triangles
-                    meshData.AddTriangle(topWest, lowSouth, lowWest);
-                    meshData.AddTriangle(lowSouth, topWest, topSouth);
+                    //meshData.AddTriangle(topWest, lowSouth, lowWest);
+                    //meshData.AddTriangle(lowSouth, topWest, topSouth);
                 }
 
                 vertexIndex += 1;
@@ -103,7 +115,10 @@ public class MeshData {
     public MeshData(int verticesPerLine) {
         // we generate upper vertices on top of the regular vertices, and upper layer has twice the amout of vertices to keep each quad completely independent
         // we generate useless additional vertices for corner and edge parts of the mesh because coding hard :(.
-        int spaceToAllocate = verticesPerLine * verticesPerLine * 3;
+        int spaceToAllocateToLowerLayer = verticesPerLine * verticesPerLine;
+        // upper layer has twice the amount of vertices horizontally and twice the amount of vertices vertically
+        int spaceToAllocateToUpperLayer = 2 * verticesPerLine * 2 * verticesPerLine;
+        int spaceToAllocate = spaceToAllocateToLowerLayer + spaceToAllocateToUpperLayer;
         vertices = new Vector3[spaceToAllocate];
         uvs = new Vector2[spaceToAllocate];
         // 6 vertices make up 2 triangles which make 1 quad. 6 quads make a cube

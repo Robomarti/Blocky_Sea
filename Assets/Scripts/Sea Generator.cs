@@ -36,7 +36,7 @@ public class SeaGenerator : MonoBehaviour {
         DisplaySea displaySea = FindAnyObjectByType<DisplaySea>();
         if (drawMode == DrawMode.Mesh) {
             MeshData seaMesh = SeaMeshGenerator.GenerateSeaMesh(heightMap.GetLength(0), EditorPreviewLevelOfDetail);
-            AnimateSea.UpdateSeaHeight(seaMesh, new float[1,1]);
+            //AnimateSea.UpdateSeaHeight(seaMesh, new float[1,1]);
             displaySea.DrawMesh(seaMesh);
         } 
         else {
