@@ -1,14 +1,15 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class Wind : MonoBehaviour
+public class Wind: MonoBehaviour
 {
-    public Vector2 windDirection;
-    public float windStrength;
+    [SerializeField] private Vector2 windDirection;
+    [SerializeField] private float windStrength;
+    [SerializeField] private Image windDirectionImage;
 
-    private void Start()
+    public Vector2 GetWind()
     {
-        windDirection = windDirection.normalized;
+        return windDirection.normalized * windStrength;
     }
 }

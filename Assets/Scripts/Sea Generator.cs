@@ -23,7 +23,7 @@ public class SeaGenerator : MonoBehaviour {
     [SerializeField] private int octaves;
     [Range(0,1)] [SerializeField] private float persistence;
     [SerializeField] private float lacunarity;
-    [SerializeField] private Vector2 offset;
+    public Vector2 offset;
     [SerializeField] private float meshHeightMultiplier;
     public bool autoUpdate;
 
@@ -36,7 +36,7 @@ public class SeaGenerator : MonoBehaviour {
         DisplaySea displaySea = FindAnyObjectByType<DisplaySea>();
         if (drawMode == DrawMode.Mesh) {
             MeshData seaMesh = SeaMeshGenerator.GenerateSeaMesh(heightMap.GetLength(0), EditorPreviewLevelOfDetail);
-            AnimateSea.UpdateSeaHeight(seaMesh, new float[1,1]);
+            AnimateSea.UpdateSeaHeight(seaMesh, heightMap);
             displaySea.DrawMesh(seaMesh);
         } 
         else {

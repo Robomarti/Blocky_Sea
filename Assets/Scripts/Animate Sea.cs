@@ -7,10 +7,9 @@ public static class AnimateSea
         int firstUpperLayerVertexIndex = meshData.firstUpperLayerVertexIndex;
         int upperLayerVerticesPerLine = meshData.upperLayerVerticesPerLine;
 
-        //meshData.vertices[firstUpperLayerVertexIndex+3].y = 20;
-        //meshData.vertices[firstUpperLayerVertexIndex+6].y = 20;
-        //meshData.vertices[upperLayerVerticesPerLine + firstUpperLayerVertexIndex + 1].y = 20;
-        //meshData.vertices[upperLayerVerticesPerLine + firstUpperLayerVertexIndex + 4].y = 20;
+        int mapWidthHeight = heightMap.GetLength(0);
+        float topLeftX = (mapWidthHeight - 1) / -2f;
+        float topLeftZ = (mapWidthHeight - 1) / 2f;
 
         for (int vertexIndex = firstUpperLayerVertexIndex; vertexIndex < verticesLength; vertexIndex += 4) {
             // Ensure we are not on the lower or right border before moving triangles
@@ -21,7 +20,9 @@ public static class AnimateSea
                 int topWest = upperLayerVerticesPerLine + vertexIndex + 1;
                 int topSouth = upperLayerVerticesPerLine + vertexIndex + 4;
 
-                float quadHeight = Random.Range(5,20);
+                Vector2 samplePoint = new(meshData.vertices[topNorth].x-topLeftX, (meshData.vertices[topNorth].z)*-1 +topLeftZ);
+                float quadHeight = heightMap[(int)samplePoint.x, (int)samplePoint.y] * 20f;
+                //float quadHeight = Random.Range(1,20);
 
                 meshData.vertices[topNorth].y = quadHeight;
                 meshData.vertices[topEast].y = quadHeight;
