@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using UnityEngine;
 
 public static class SeaMeshGenerator {
@@ -11,21 +10,27 @@ public static class SeaMeshGenerator {
         if (levelOfDetail == 5) {
             levelOfDetail = 6;
         }
+
         int meshSimplificationIncrement = (levelOfDetail == 0) ? 1 : levelOfDetail * 2;
         int verticesPerLine = (mapWidthHeight - 1) / meshSimplificationIncrement + 1;
 
         MeshData meshData = new MeshData(verticesPerLine);
         int vertexIndex = 0;
 
-        //lower vertices
+        // Lower layer vertices
         for (int y = 0; y < mapWidthHeight; y += meshSimplificationIncrement) {
             for (int x = 0; x < mapWidthHeight; x += meshSimplificationIncrement) {
                 meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, 0, topLeftZ - y);
                 meshData.uvs[vertexIndex] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
 
+                int lowNorth = vertexIndex;
+                int lowEast = vertexIndex + 1;
+                int lowWest = verticesPerLine + vertexIndex;
+                int lowSouth = verticesPerLine + vertexIndex + 1;
+
                 if (x < mapWidthHeight - 1 && y < mapWidthHeight - 1) {
-                    meshData.AddTriangle(vertexIndex, verticesPerLine + vertexIndex + 1, verticesPerLine + vertexIndex);
-                    meshData.AddTriangle(verticesPerLine + vertexIndex + 1, vertexIndex, vertexIndex + 1);
+                    meshData.AddTriangle(lowNorth, lowSouth, lowWest);
+                    meshData.AddTriangle(lowSouth, lowNorth, lowEast);
                 }
 
                 vertexIndex += 1;
@@ -35,67 +40,61 @@ public static class SeaMeshGenerator {
         int firstUpperLayerVertexIndex = vertexIndex;
         meshData.firstUpperLayerVertexIndex = firstUpperLayerVertexIndex;
 
-        int upperLayerVerticesPerLine = verticesPerLine * 2;
+        // Upper layer vertices
+        for (int y = 0; y < mapWidthHeight; y += meshSimplificationIncrement) {
+            for (int x = 0; x < mapWidthHeight; x += meshSimplificationIncrement) {
+                // Add 4 vertices for upper layer for each vertex of lower layer
+                for (int i = 0; i < 4; i++) {
+                    meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, 10, topLeftZ - y);
+                    meshData.uvs[vertexIndex] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
+                    vertexIndex += 1;
+                }
+            }
+        }
+
+        vertexIndex = firstUpperLayerVertexIndex;
+
+        //we can think of upper layer lines either as 2 as long with 1 extra line between lines, or simply as 4 times as long as lower layer lines
+        int upperLayerVerticesPerLine = verticesPerLine * 4;
         meshData.upperLayerVerticesPerLine = upperLayerVerticesPerLine;
 
-        // Upper vertices
-        for (int y = 0; y < mapWidthHeight; y += meshSimplificationIncrement) {            
-            // add another row for previous rows triangles to connect to
+        // cube faces with upper vertices
+        for (int y = 0; y < mapWidthHeight; y += meshSimplificationIncrement) {
             for (int x = 0; x < mapWidthHeight; x += meshSimplificationIncrement) {
-                meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, 10, topLeftZ - y);
-                meshData.uvs[vertexIndex] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
-    
-                vertexIndex += 1;
-                meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, 10, topLeftZ - y);
-                meshData.uvs[vertexIndex] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
-    
-                vertexIndex += 1;
-            }
-
-            for (int x = 0; x < mapWidthHeight; x += meshSimplificationIncrement) {
-                meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, 10, topLeftZ - y);
-                meshData.uvs[vertexIndex] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
-
-                vertexIndex += 1;
-                meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, 10, topLeftZ - y);
-                meshData.uvs[vertexIndex] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
-
-                // Ensure we are not on the lower or right border before adding triangles
                 if (x < mapWidthHeight - 1 && y < mapWidthHeight - 1) {
-                    int correspondingLowerLayerVertexIndex = (int)MathF.Floor((vertexIndex - firstUpperLayerVertexIndex) / 2);
-
-                    int topNorth = vertexIndex;
-                    int topEast = vertexIndex + 1;
-                    int topSouth = upperLayerVerticesPerLine + vertexIndex + 1;
-                    int topWest = upperLayerVerticesPerLine + vertexIndex;
+                    int topNorth = vertexIndex + 3;
+                    int topEast = vertexIndex + 6;
+                    int topWest = upperLayerVerticesPerLine + vertexIndex + 1;
+                    int topSouth = upperLayerVerticesPerLine + vertexIndex + 4;
+                    
+                    int correspondingLowerLayerVertexIndex = (int)MathF.Floor((vertexIndex - firstUpperLayerVertexIndex) / 4);
 
                     int lowNorth = correspondingLowerLayerVertexIndex;
                     int lowEast = correspondingLowerLayerVertexIndex + 1;
                     int lowSouth = verticesPerLine + correspondingLowerLayerVertexIndex + 1;
                     int lowWest = verticesPerLine + correspondingLowerLayerVertexIndex;
 
-                    //top triangles
+                    // Top triangles
                     meshData.AddTriangle(topNorth, topSouth, topWest);
                     meshData.AddTriangle(topSouth, topNorth, topEast);
 
-                    //northeast triangles
-                    //meshData.AddTriangle(topEast, lowNorth, lowEast);
-                    //meshData.AddTriangle(lowNorth, topEast, topNorth);
+                    // Northeast triangles
+                    meshData.AddTriangle(topEast, lowNorth, lowEast);
+                    meshData.AddTriangle(lowNorth, topEast, topNorth);
 
-                    //northwest triangles
-                    //meshData.AddTriangle(topNorth, lowWest, lowNorth);
-                    //meshData.AddTriangle(lowWest, topNorth, topWest);
+                    // Northwest triangles
+                    meshData.AddTriangle(topNorth, lowWest, lowNorth);
+                    meshData.AddTriangle(lowWest, topNorth, topWest);
 
-                    //southeast triangles
-                    //meshData.AddTriangle(topSouth, lowEast, lowSouth);
-                    //meshData.AddTriangle(lowEast, topSouth, topEast);
+                    // Southeast triangles
+                    meshData.AddTriangle(topSouth, lowEast, lowSouth);
+                    meshData.AddTriangle(lowEast, topSouth, topEast);
 
-                    //southwest triangles
-                    //meshData.AddTriangle(topWest, lowSouth, lowWest);
-                    //meshData.AddTriangle(lowSouth, topWest, topSouth);
+                    // Southwest triangles
+                    meshData.AddTriangle(topWest, lowSouth, lowWest);
+                    meshData.AddTriangle(lowSouth, topWest, topSouth);
                 }
-
-                vertexIndex += 1;
+                vertexIndex += 4;
             }
         }
 
@@ -113,10 +112,10 @@ public class MeshData {
     public int upperLayerVerticesPerLine;
 
     public MeshData(int verticesPerLine) {
-        // we generate upper vertices on top of the regular vertices, and upper layer has twice the amout of vertices to keep each quad completely independent
-        // we generate useless additional vertices for corner and edge parts of the mesh because coding hard :(.
         int spaceToAllocateToLowerLayer = verticesPerLine * verticesPerLine;
-        // upper layer has twice the amount of vertices horizontally and twice the amount of vertices vertically
+        // We generate upper vertices on top of the regular vertices, and upper layer has 4 times the amount of vertices to keep each quad completely independent
+        // We generate useless additional vertices for corner and edge parts of the mesh because coding hard :(.
+        // Upper layer has twice the amount of vertices horizontally and twice the amount of vertices vertically
         int spaceToAllocateToUpperLayer = 2 * verticesPerLine * 2 * verticesPerLine;
         int spaceToAllocate = spaceToAllocateToLowerLayer + spaceToAllocateToUpperLayer;
         vertices = new Vector3[spaceToAllocate];
