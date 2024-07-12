@@ -15,20 +15,20 @@ public class SeaGenerator : MonoBehaviour {
         _144 = 145,
         _168 = 169,
     }
-    [SerializeField] private ChunkSize chunkSize;
-    public static int seaChunkSize;
-    [Range(0,5)] public int EditorPreviewLevelOfDetail;
+    public ChunkSize seaChunkSize;
+    [Range(1,5)] public int EditorPreviewLevelOfDetail;
     [SerializeField] private int seed;
     [SerializeField] private float noiseScale;
     [SerializeField] private int octaves;
     [Range(0,1)] [SerializeField] private float persistence;
     [SerializeField] private float lacunarity;
-    public Vector2 offset;
     [SerializeField] private float meshHeightMultiplier;
     public bool autoUpdate;
 
     private Queue<SeaThreadInfo<float[,]>> heightMapThreadInfoQueue = new Queue<SeaThreadInfo<float[,]>>();
     private Queue<SeaThreadInfo<MeshData>> meshDataThreadInfoQueue = new Queue<SeaThreadInfo<MeshData>>();
+
+    [SerializeField] private Wind windManager;
 
     public void DrawSeaInEditor() {
         float[,] heightMap = GenerateHeightMap(Vector2.zero);
@@ -36,8 +36,9 @@ public class SeaGenerator : MonoBehaviour {
         DisplaySea displaySea = FindAnyObjectByType<DisplaySea>();
         if (drawMode == DrawMode.Mesh) {
             MeshData seaMesh = SeaMeshGenerator.GenerateSeaMesh(heightMap.GetLength(0), EditorPreviewLevelOfDetail);
-            AnimateSea.UpdateSeaHeight(seaMesh, heightMap);
-            displaySea.DrawMesh(seaMesh);
+            Mesh mesh = seaMesh.CreateMesh();
+            AnimateSea.UpdateSeaHeight(mesh, heightMap, seaMesh.firstUpperLayerVertexIndex, seaMesh.upperLayerVerticesPerLine);
+            displaySea.DrawMesh(mesh);
         } 
         else {
             displaySea.DrawNoiseMap(heightMap);
@@ -90,8 +91,7 @@ public class SeaGenerator : MonoBehaviour {
     }
 
     private float[,] GenerateHeightMap(Vector2 center) {
-        seaChunkSize = (int)chunkSize;
-        float[,] noiseMap = Noise.GenerateNoiseMap(seaChunkSize, seed, noiseScale, octaves, persistence, lacunarity, center + offset, normalizeMode);
+        float[,] noiseMap = Noise.GenerateNoiseMap((int)seaChunkSize, seed, noiseScale, octaves, persistence, lacunarity, center + windManager.seaOffset, normalizeMode);
         return noiseMap;
     }
 

@@ -24,7 +24,7 @@ public class DisplaySea : MonoBehaviour {
         textureRenderer.sharedMaterial.mainTexture = texture;
     }
 
-    public void DrawMesh(MeshData meshData) {
-        meshFilter.sharedMesh = meshData.CreateMesh();
+    public void DrawMesh(Mesh mesh) {
+        meshFilter.sharedMesh = mesh;
     }
 }
