@@ -209,7 +209,7 @@ MonoBehaviour:
   - levelOfDetail: 5
     visibleDistanceThreshold: 170
   viewer: {fileID: 1795021992}
-  seaMaterial: {fileID: 2100000, guid: 35eb0fb365ccc6747ac2120568c33829, type: 2}
+  seaMaterial: {fileID: 2100000, guid: 503bfd34c06bb644fbec6882f0f991cd, type: 2}
 --- !u!1 &72386002
 GameObject:
   m_ObjectHideFlags: 0
@@ -379,7 +379,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!64 &296450407
 MeshCollider:
   m_ObjectHideFlags: 0

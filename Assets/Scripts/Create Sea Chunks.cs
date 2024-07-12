@@ -24,6 +24,7 @@ public class CreateSeaChunks : MonoBehaviour
         CreateVisibleChunks();
     }
 
+    /*
     private void Update() {
         foreach (SeaChunk seaChunk in seaChunks) {
             if (seaChunk.isReadyToAnimate.Value) {
@@ -31,6 +32,7 @@ public class CreateSeaChunks : MonoBehaviour
             }
         }
     }
+    */
 
     private void CreateVisibleChunks() {
         int currentChunkXCoordinate = Mathf.RoundToInt(viewerPosition.x / chunkSize);
