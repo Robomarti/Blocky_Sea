@@ -20,6 +20,14 @@ public class Wind: MonoBehaviour
         if (windDirection.y > 1) {
             windDirection.y = 1;
         }
+
+        // ensure that it is always just a little bit windy
+        if (windDirection.x == 0) {
+            windDirection.x = 0.1f;
+        }
+        if (windDirection.y == 0) {
+            windDirection.y = 0.1f;
+        }
     }
 
     private void Update() {

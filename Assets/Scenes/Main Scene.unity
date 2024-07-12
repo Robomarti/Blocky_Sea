@@ -623,8 +623,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30d8561b203e3c14c8c8ed6d859c0756, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  windDirection: {x: 0, y: 0}
-  windStrength: 0
+  windDirection: {x: 1, y: 1}
+  windStrength: 50
   windDirectionImageTransform: {fileID: 161800085}
   seaOffset: {x: 0, y: 0}
 --- !u!1 &842049749
