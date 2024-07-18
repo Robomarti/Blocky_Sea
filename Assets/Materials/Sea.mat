@@ -39,9 +39,12 @@ Material:
     m_Ints: []
     m_Floats:
     - _Depth: 0.15
+    - _Lower_vertices_Height: 0.1
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Strength: 1.11
+    - _Wave_Speed: 1
+    - _Wave_Strength: 3
     m_Colors:
     - _Deep_Water_Color: {r: 0.04579027, g: 0.23396, b: 0.46226406, a: 0.9490196}
     - _Shallow_Water_Color: {r: 0.10791194, g: 0.8532529, b: 0.9150943, a: 0.7882353}
