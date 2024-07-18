@@ -5,7 +5,8 @@ Shader "Unlit/UpdatedSea"
         _MainTex("Texture", 2D) = "white" {}
         _SeaColor("Color", Color) = (1,1,1,1)
         _LowerVerticesHeight("Lower Vertices Height", int) = 0.1
-        _WaveSpeed("Wave Speed", Range(0,5)) = 0.1
+        _NorthSouthWaveSpeed("North-South Wave Speed", Range(-500,500)) = 50
+        _WestEastWaveSpeed("West-East Wave Speed", Range(-500,500)) = 50
         _MaximumWaveHeight("Maximum Wave Height", Range(1,10)) = 1
     }
     SubShader
@@ -40,19 +41,21 @@ Shader "Unlit/UpdatedSea"
             float4 _MainTex_ST;
             fixed4 _SeaColor;
             int _LowerVerticesHeight;
-            float _WaveSpeed;
+            float _NorthSouthWaveSpeed;
+            float _WestEastWaveSpeed;
             float _MaximumWaveHeight;
 
-            float VertexHeight()
+            float VertexHeight(float4 worldPosition)
             {
-                return _MaximumWaveHeight * sin(_Time.y * _WaveSpeed) + _MaximumWaveHeight + _LowerVerticesHeight;
+                return (sin((worldPosition.x + worldPosition.z) + (_Time * _NorthSouthWaveSpeed)) * _MaximumWaveHeight) + _MaximumWaveHeight + _LowerVerticesHeight;
             }
 
             v2f vertexFunction (appdata INPUT)
             {
                 v2f OUTPUT;
 
-                INPUT.vertex.y = INPUT.vertex.y > _LowerVerticesHeight ? VertexHeight() : INPUT.vertex.y;
+                float4 worldPosition = mul(unity_ObjectToWorld, INPUT.vertex);
+                INPUT.vertex.y = INPUT.vertex.y > _LowerVerticesHeight ? VertexHeight(worldPosition) : INPUT.vertex.y;
 
                 OUTPUT.vertex = UnityObjectToClipPos(INPUT.vertex);
                 OUTPUT.uv = TRANSFORM_TEX(INPUT.uv, _MainTex);

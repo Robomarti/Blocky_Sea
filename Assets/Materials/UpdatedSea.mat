@@ -30,8 +30,11 @@ Material:
     m_Ints: []
     m_Floats:
     - _LowerVerticesHeight: 0.1
-    - _MaximumWaveHeight: 1
+    - _MaximumWaveHeight: 10
+    - _NorthSouthWaveSpeed: 50
     - _WaveSpeed: 1
-    m_Colors: []
+    - _WestEastWaveSpeed: 1
+    m_Colors:
+    - _SeaColor: {r: 0.10234957, g: 0.35770854, b: 0.8679245, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
