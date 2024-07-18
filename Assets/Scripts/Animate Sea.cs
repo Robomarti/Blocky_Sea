@@ -12,10 +12,10 @@ public static class AnimateSea
         Vector3[] newVertices = mesh.vertices;
 
         for (int vertexIndex = firstUpperLayerVertexIndex; vertexIndex < verticesLength - upperLayerVerticesPerLine - 4; vertexIndex += 4) {
-            int topNorth = vertexIndex + 3;
-            int topEast = vertexIndex + 6;
-            int topWest = upperLayerVerticesPerLine + vertexIndex + 1;
-            int topSouth = upperLayerVerticesPerLine + vertexIndex + 4;
+            int topNorth = vertexIndex;
+            int topEast = vertexIndex + 1;
+            int topWest = vertexIndex + 2;
+            int topSouth = vertexIndex + 3;
 
             Vector2 samplePoint = new(newVertices[topNorth].x-topLeftX, (newVertices[topNorth].z)*-1 +topLeftZ);
             float quadHeight = heightMap[(int)samplePoint.x, (int)samplePoint.y] * 20f;

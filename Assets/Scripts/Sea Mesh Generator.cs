@@ -40,39 +40,38 @@ public static class SeaMeshGenerator {
         int firstUpperLayerVertexIndex = vertexIndex;
         meshData.firstUpperLayerVertexIndex = firstUpperLayerVertexIndex;
 
-        // Upper layer vertices
-        for (int y = 0; y < mapWidthHeight; y += meshSimplificationIncrement) {
-            for (int x = 0; x < mapWidthHeight; x += meshSimplificationIncrement) {
-                // Add 4 vertices for upper layer for each vertex of lower layer
-                for (int i = 0; i < 4; i++) {
-                    meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, 10, topLeftZ - y);
-                    meshData.uvs[vertexIndex] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
-                    vertexIndex += 1;
-                }
-            }
-        }
-
-        vertexIndex = firstUpperLayerVertexIndex;
-
         //we can think of upper layer lines either as 2 as long with 1 extra line between lines, or simply as 4 times as long as lower layer lines
         int upperLayerVerticesPerLine = verticesPerLine * 4;
         meshData.upperLayerVerticesPerLine = upperLayerVerticesPerLine;
 
-        // cube faces with upper vertices
+        // Upper layer vertices
         for (int y = 0; y < mapWidthHeight; y += meshSimplificationIncrement) {
             for (int x = 0; x < mapWidthHeight; x += meshSimplificationIncrement) {
                 if (x < mapWidthHeight - 1 && y < mapWidthHeight - 1) {
-                    int topNorth = vertexIndex + 3;
-                    int topEast = vertexIndex + 6;
-                    int topWest = upperLayerVerticesPerLine + vertexIndex + 1;
-                    int topSouth = upperLayerVerticesPerLine + vertexIndex + 4;
-                    
-                    int correspondingLowerLayerVertexIndex = (int)MathF.Floor((vertexIndex - firstUpperLayerVertexIndex) / 4);
+                    int topNorth = vertexIndex;
+                    int topEast = vertexIndex + 1;
+                    int topWest =  vertexIndex + 2;
+                    int topSouth =  vertexIndex + 3;
+                
+                    meshData.vertices[topNorth] = new Vector3(topLeftX + x, 10, topLeftZ - y);
+                    meshData.uvs[topNorth] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
 
-                    int lowNorth = correspondingLowerLayerVertexIndex;
-                    int lowEast = correspondingLowerLayerVertexIndex + 1;
-                    int lowWest = verticesPerLine + correspondingLowerLayerVertexIndex;
-                    int lowSouth = verticesPerLine + correspondingLowerLayerVertexIndex + 1;
+                    meshData.vertices[topEast] = new Vector3(topLeftX + x + meshSimplificationIncrement, 10, topLeftZ - y);
+                    meshData.uvs[topEast] = new Vector2((x + meshSimplificationIncrement) / (float)mapWidthHeight, y / (float)mapWidthHeight);
+
+                    meshData.vertices[topWest] = new Vector3(topLeftX + x, 10, topLeftZ - y - meshSimplificationIncrement);
+                    meshData.uvs[topWest] = new Vector2(x / (float)mapWidthHeight, (y - meshSimplificationIncrement) / (float)mapWidthHeight);
+
+                    meshData.vertices[topSouth] = new Vector3(topLeftX + x + meshSimplificationIncrement, 10, topLeftZ - y - meshSimplificationIncrement);
+                    meshData.uvs[topSouth] = new Vector2((x + meshSimplificationIncrement) / (float)mapWidthHeight, (y - meshSimplificationIncrement) / (float)mapWidthHeight);
+
+                    
+                    int lowNorthVertexIndex = (int)MathF.Floor((vertexIndex - firstUpperLayerVertexIndex) / 4);
+
+                    int lowNorth = lowNorthVertexIndex;
+                    int lowEast = lowNorthVertexIndex + 1;
+                    int lowWest = verticesPerLine + lowNorthVertexIndex;
+                    int lowSouth = verticesPerLine + lowNorthVertexIndex + 1;
 
                     // Top triangles
                     meshData.AddTriangle(topNorth, topSouth, topWest);
