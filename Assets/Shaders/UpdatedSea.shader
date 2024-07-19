@@ -28,6 +28,7 @@ Shader "Unlit/UpdatedSea"
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
+                float2 quadIdentifier : TEXCOORD1;
             };
 
             struct v2f
@@ -45,17 +46,16 @@ Shader "Unlit/UpdatedSea"
             float _WestEastWaveSpeed;
             float _MaximumWaveHeight;
 
-            float VertexHeight(float4 worldPosition)
+            float VertexHeight(float2 quadIdentifier)
             {
-                return (sin((worldPosition.x + worldPosition.z) + (_Time * _NorthSouthWaveSpeed)) * _MaximumWaveHeight) + _MaximumWaveHeight + _LowerVerticesHeight;
+                return (sin((quadIdentifier.x + quadIdentifier.y) + (_Time * _NorthSouthWaveSpeed)) * _MaximumWaveHeight) + _MaximumWaveHeight + _LowerVerticesHeight;
             }
 
             v2f vertexFunction (appdata INPUT)
             {
                 v2f OUTPUT;
 
-                float4 worldPosition = mul(unity_ObjectToWorld, INPUT.vertex);
-                INPUT.vertex.y = INPUT.vertex.y > _LowerVerticesHeight ? VertexHeight(worldPosition) : INPUT.vertex.y;
+                INPUT.vertex.y = INPUT.vertex.y > _LowerVerticesHeight ? VertexHeight(INPUT.quadIdentifier) : INPUT.vertex.y;
 
                 OUTPUT.vertex = UnityObjectToClipPos(INPUT.vertex);
                 OUTPUT.uv = TRANSFORM_TEX(INPUT.uv, _MainTex);

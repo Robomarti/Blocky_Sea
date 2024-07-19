@@ -52,18 +52,26 @@ public static class SeaMeshGenerator {
                     int topEast = vertexIndex + 1;
                     int topWest =  vertexIndex + 2;
                     int topSouth =  vertexIndex + 3;
-                
+
+                    // save same data for each vertex of a quad, so shader can animate them at the same height
+                    float quadCenterX = ((topLeftX + x) + (topLeftX + x + meshSimplificationIncrement)) / 2;
+                    float quadCenterY = ((topLeftZ - y) + (topLeftZ - y - meshSimplificationIncrement)) / 2;
+
                     meshData.vertices[topNorth] = new Vector3(topLeftX + x, 10, topLeftZ - y);
                     meshData.uvs[topNorth] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
+                    meshData.quadIdentifiers[topNorth] = new Vector2(quadCenterX, quadCenterY);
 
                     meshData.vertices[topEast] = new Vector3(topLeftX + x + meshSimplificationIncrement, 10, topLeftZ - y);
                     meshData.uvs[topEast] = new Vector2((x + meshSimplificationIncrement) / (float)mapWidthHeight, y / (float)mapWidthHeight);
+                    meshData.quadIdentifiers[topEast] = new Vector2(quadCenterX, quadCenterY);
 
                     meshData.vertices[topWest] = new Vector3(topLeftX + x, 10, topLeftZ - y - meshSimplificationIncrement);
                     meshData.uvs[topWest] = new Vector2(x / (float)mapWidthHeight, (y - meshSimplificationIncrement) / (float)mapWidthHeight);
+                    meshData.quadIdentifiers[topWest] = new Vector2(quadCenterX, quadCenterY);
 
                     meshData.vertices[topSouth] = new Vector3(topLeftX + x + meshSimplificationIncrement, 10, topLeftZ - y - meshSimplificationIncrement);
                     meshData.uvs[topSouth] = new Vector2((x + meshSimplificationIncrement) / (float)mapWidthHeight, (y - meshSimplificationIncrement) / (float)mapWidthHeight);
+                    meshData.quadIdentifiers[topSouth] = new Vector2(quadCenterX, quadCenterY);
 
                     
                     int lowNorthVertexIndex = (int)MathF.Floor((vertexIndex - firstUpperLayerVertexIndex) / 4);
@@ -104,6 +112,7 @@ public static class SeaMeshGenerator {
 public class MeshData {
     public Vector3[] vertices;
     public Vector2[] uvs;
+    public Vector2[] quadIdentifiers;
     public int[] triangles;
     private int triangleIndex;
 
@@ -119,6 +128,7 @@ public class MeshData {
         int spaceToAllocate = spaceToAllocateToLowerLayer + spaceToAllocateToUpperLayer;
         vertices = new Vector3[spaceToAllocate];
         uvs = new Vector2[spaceToAllocate];
+        quadIdentifiers = new Vector2[spaceToAllocate];
         // 6 vertices make up 2 triangles which make 1 quad. 6 quads make a cube
         int trianglesToAllocate = (verticesPerLine - 1) * (verticesPerLine - 1) * 6 * 6;
         triangles = new int[trianglesToAllocate];
@@ -135,7 +145,8 @@ public class MeshData {
     public Mesh CreateMesh() {
         Mesh mesh = new Mesh();
         mesh.vertices = vertices;
-        mesh.uv = uvs;
+        mesh.SetUVs(0, uvs);
+        mesh.SetUVs(1, quadIdentifiers);
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
         return mesh;
