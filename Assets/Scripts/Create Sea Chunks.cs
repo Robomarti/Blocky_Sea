@@ -24,16 +24,6 @@ public class CreateSeaChunks : MonoBehaviour
         CreateVisibleChunks();
     }
 
-    /*
-    private void Update() {
-        foreach (SeaChunk seaChunk in seaChunks) {
-            if (seaChunk.isReadyToAnimate.Value) {
-                seaChunk.RequestHeightData(seaChunk.Position);
-            }
-        }
-    }
-    */
-
     private void CreateVisibleChunks() {
         int currentChunkXCoordinate = Mathf.RoundToInt(viewerPosition.x / chunkSize);
         int currentChunkYCoordinate = Mathf.RoundToInt(viewerPosition.y / chunkSize);
@@ -60,18 +50,9 @@ public class CreateSeaChunks : MonoBehaviour
         private MeshFilter meshFilter;
         private int levelOfDetail = -1;
 
-        private MyRef<int> firstUpperLayerVertexIndex;
-        private MyRef<int> upperLayerVerticesPerLine;
-
-        public MyRef<bool> isReadyToAnimate;
-
         public SeaChunk(Vector2 coordinates, int size, Transform parent, Material material, LevelOfDetailInfo[] detailLevels) {
             position = coordinates * size;
             bounds = new Bounds(position,Vector2.one * size);
-            firstUpperLayerVertexIndex = new MyRef<int> { Value = 0 };
-            upperLayerVerticesPerLine = new MyRef<int> { Value = 0 };
-            isReadyToAnimate = new MyRef<bool> { Value = false };
-
             float viewerDistanceFromNearestEdge = Mathf.Sqrt(bounds.SqrDistance(viewerPosition));
 
             for (int i = 0; i < detailLevels.Length-1; i++){
@@ -97,44 +78,22 @@ public class CreateSeaChunks : MonoBehaviour
         }
 
         private void OnSeaDataReceived(float[,] heightMap) {
-            LevelOfDetailMesh levelOfDetailMesh = new LevelOfDetailMesh(levelOfDetail, meshFilter, firstUpperLayerVertexIndex, upperLayerVerticesPerLine, isReadyToAnimate);
+            LevelOfDetailMesh levelOfDetailMesh = new LevelOfDetailMesh(levelOfDetail, meshFilter);
             levelOfDetailMesh.RequestMesh(heightMap);
-        }
-
-        public void RequestHeightData(Vector2 position) {
-            seaGenerator.RequestHeightMap(OnHeightDataReceived, position);
-        }
-
-        private void OnHeightDataReceived(float[,] heightMap) {
-            // wait until the values have been initialized
-            if (isReadyToAnimate.Value) {
-                AnimateSea.UpdateSeaHeight(meshFilter.mesh, heightMap, firstUpperLayerVertexIndex.Value, upperLayerVerticesPerLine.Value);
-            }
         }
     }
 
     class LevelOfDetailMesh {
-        private Mesh mesh;
         private int levelOfDetail;
         private MeshFilter meshFilter;
-        private MyRef<int> firstUpperLayerVertexIndex;
-        private MyRef<int> upperLayerVerticesPerLine;
-        private MyRef<bool> isReadyToAnimate;
 
-        public LevelOfDetailMesh(int receivedLevelOfDetail, MeshFilter receivedMeshFilter, MyRef<int> receivedFirstUpperLayerVertexIndex, MyRef<int> receivedUpperLayerVerticesPerLine, MyRef<bool> receivedIsReadyToAnimate) {
+        public LevelOfDetailMesh(int receivedLevelOfDetail, MeshFilter receivedMeshFilter) {
             levelOfDetail = receivedLevelOfDetail;
             meshFilter = receivedMeshFilter;
-            firstUpperLayerVertexIndex = receivedFirstUpperLayerVertexIndex;
-            upperLayerVerticesPerLine = receivedUpperLayerVerticesPerLine;
-            isReadyToAnimate = receivedIsReadyToAnimate;
         }
 
         private void OnMeshDataReceived(MeshData meshData) {
-            firstUpperLayerVertexIndex.Value = meshData.firstUpperLayerVertexIndex;
-            upperLayerVerticesPerLine.Value = meshData.upperLayerVerticesPerLine;
-            isReadyToAnimate.Value = true;
-            mesh = meshData.CreateMesh();
-            meshFilter.mesh = mesh;
+            meshFilter.mesh = meshData.CreateMesh();
         }
 
         public void RequestMesh(float[,] heightMap) {
@@ -146,9 +105,4 @@ public class CreateSeaChunks : MonoBehaviour
         public int levelOfDetail;
         public float visibleDistanceThreshold;
     }
-}
-
-
-public sealed class MyRef<T> {
-    public T Value { get; set; }
 }
