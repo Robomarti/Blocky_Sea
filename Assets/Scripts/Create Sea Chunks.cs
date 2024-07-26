@@ -74,12 +74,12 @@ public class CreateSeaChunks : MonoBehaviour
             meshObject.transform.parent = parent;
             meshObject.transform.localScale = Vector3.one * scale;
 
-            seaGenerator.RequestHeightMap(OnSeaDataReceived, position);
+            CreateSeaMesh();
         }
 
-        private void OnSeaDataReceived(float[,] heightMap) {
+        private void CreateSeaMesh() {
             LevelOfDetailMesh levelOfDetailMesh = new LevelOfDetailMesh(levelOfDetail, meshFilter);
-            levelOfDetailMesh.RequestMesh(heightMap);
+            levelOfDetailMesh.RequestMesh();
         }
     }
 
@@ -96,8 +96,8 @@ public class CreateSeaChunks : MonoBehaviour
             meshFilter.mesh = meshData.CreateMesh();
         }
 
-        public void RequestMesh(float[,] heightMap) {
-            seaGenerator.RequestMeshData(heightMap, OnMeshDataReceived, levelOfDetail);
+        public void RequestMesh() {
+            seaGenerator.RequestMeshData(OnMeshDataReceived, levelOfDetail);
         }
     }
 
