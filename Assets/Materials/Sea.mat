@@ -38,13 +38,17 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Depth: 0.15
+    - _Depth: -5.58
+    - _Lower_vertices_Height: 0.1
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Strength: 1.11
+    - _Strength: 0.064
+    - _Wave_Speed: 1.95
+    - _Wave_Strength: 5
     m_Colors:
     - _Deep_Water_Color: {r: 0.04579027, g: 0.23396, b: 0.46226406, a: 0.9490196}
     - _Shallow_Water_Color: {r: 0.10791194, g: 0.8532529, b: 0.9150943, a: 0.7882353}
+    - _Wave_Direction: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &2439602544171993505
