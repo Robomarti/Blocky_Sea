@@ -11,12 +11,9 @@ public class SeaGenerator : MonoBehaviour {
         _48 = 49,
         _72 = 73,
         _96 = 97,
-        _120 = 121,
-        _144 = 145,
-        _168 = 169,
     }
     public ChunkSize seaChunkSize;
-    [Range(1,5)] public int EditorPreviewLevelOfDetail;
+    [Range(0,5)] public int EditorPreviewLevelOfDetail;
     [SerializeField] private int seed;
     [SerializeField] private float noiseScale;
     [SerializeField] private int octaves;
