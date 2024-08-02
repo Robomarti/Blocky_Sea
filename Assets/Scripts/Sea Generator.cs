@@ -4,7 +4,7 @@ using System.Threading;
 using System.Collections.Generic;
 
 public class SeaGenerator : MonoBehaviour {
-    [SerializeField] private enum DrawMode { Mesh };
+    [SerializeField] private enum DrawMode { Mesh, None };
     [SerializeField] private DrawMode drawMode;
     public enum ChunkSize {
         _48 = 49,
