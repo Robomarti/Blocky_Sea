@@ -4,9 +4,8 @@ using System.Threading;
 using System.Collections.Generic;
 
 public class SeaGenerator : MonoBehaviour {
-    [SerializeField] private enum DrawMode { Mesh, HeightMap };
+    [SerializeField] private enum DrawMode { Mesh };
     [SerializeField] private DrawMode drawMode;
-    [SerializeField] private Noise.NormalizeMode normalizeMode;
     public enum ChunkSize {
         _48 = 49,
         _72 = 73,
@@ -14,12 +13,7 @@ public class SeaGenerator : MonoBehaviour {
     }
     public ChunkSize seaChunkSize;
     [Range(0,5)] public int EditorPreviewLevelOfDetail;
-    [SerializeField] private int seed;
-    [SerializeField] private float noiseScale;
-    [SerializeField] private int octaves;
-    [Range(0,1)] [SerializeField] private float persistence;
-    [SerializeField] private float lacunarity;
-    [SerializeField] private float meshHeightMultiplier;
+    [SerializeField] private float topVerticesHeight;
     public bool autoUpdate;
 
     private Queue<SeaThreadInfo<MeshData>> meshDataThreadInfoQueue = new Queue<SeaThreadInfo<MeshData>>();
@@ -27,7 +21,7 @@ public class SeaGenerator : MonoBehaviour {
     public void DrawSeaInEditor() {
         DisplaySea displaySea = FindAnyObjectByType<DisplaySea>();
         if (drawMode == DrawMode.Mesh) {
-            MeshData seaMesh = SeaMeshGenerator.GenerateSeaMesh((int)seaChunkSize, EditorPreviewLevelOfDetail);
+            MeshData seaMesh = SeaMeshGenerator.GenerateSeaMesh((int)seaChunkSize, EditorPreviewLevelOfDetail, topVerticesHeight);
             Mesh mesh = seaMesh.CreateMesh();
             displaySea.DrawMesh(mesh);
         }
@@ -42,7 +36,7 @@ public class SeaGenerator : MonoBehaviour {
     }
 
     private void MeshDataThread(Action<MeshData> callback, int levelOfDetail) {
-        MeshData meshData = SeaMeshGenerator.GenerateSeaMesh((int)seaChunkSize, levelOfDetail);
+        MeshData meshData = SeaMeshGenerator.GenerateSeaMesh((int)seaChunkSize, levelOfDetail, topVerticesHeight);
         lock (meshDataThreadInfoQueue) {
             meshDataThreadInfoQueue.Enqueue(new SeaThreadInfo<MeshData>(callback, meshData));
         }
@@ -54,15 +48,6 @@ public class SeaGenerator : MonoBehaviour {
                 SeaThreadInfo<MeshData> threadInfo = meshDataThreadInfoQueue.Dequeue();
                 threadInfo.callback(threadInfo.parameter);
             }
-        }
-    }
-
-    private void OnValidate() {
-        if (lacunarity < 1) {
-            lacunarity = 1;
-        }
-        if (octaves < 0) {
-            octaves = 0;
         }
     }
 

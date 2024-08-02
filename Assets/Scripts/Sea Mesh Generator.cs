@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 public static class SeaMeshGenerator {
-    public static MeshData GenerateSeaMesh(int mapWidthHeight, int levelOfDetail) {
+    public static MeshData GenerateSeaMesh(int mapWidthHeight, int levelOfDetail, float topVerticesHeight) {
         float topLeftX = (mapWidthHeight - 1) / -2f;
         float topLeftZ = (mapWidthHeight - 1) / 2f;
 
@@ -57,19 +57,19 @@ public static class SeaMeshGenerator {
                     float quadCenterX = ((topLeftX + x) + (topLeftX + x + meshSimplificationIncrement)) / 2;
                     float quadCenterY = ((topLeftZ - y) + (topLeftZ - y - meshSimplificationIncrement)) / 2;
 
-                    meshData.vertices[topNorth] = new Vector3(topLeftX + x, 10, topLeftZ - y);
+                    meshData.vertices[topNorth] = new Vector3(topLeftX + x, topVerticesHeight, topLeftZ - y);
                     meshData.uvs[topNorth] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
                     meshData.quadIdentifiers[topNorth] = new Vector2(quadCenterX, quadCenterY);
 
-                    meshData.vertices[topEast] = new Vector3(topLeftX + x + meshSimplificationIncrement, 10, topLeftZ - y);
+                    meshData.vertices[topEast] = new Vector3(topLeftX + x + meshSimplificationIncrement, topVerticesHeight, topLeftZ - y);
                     meshData.uvs[topEast] = new Vector2((x + meshSimplificationIncrement) / (float)mapWidthHeight, y / (float)mapWidthHeight);
                     meshData.quadIdentifiers[topEast] = new Vector2(quadCenterX, quadCenterY);
 
-                    meshData.vertices[topWest] = new Vector3(topLeftX + x, 10, topLeftZ - y - meshSimplificationIncrement);
+                    meshData.vertices[topWest] = new Vector3(topLeftX + x, topVerticesHeight, topLeftZ - y - meshSimplificationIncrement);
                     meshData.uvs[topWest] = new Vector2(x / (float)mapWidthHeight, (y - meshSimplificationIncrement) / (float)mapWidthHeight);
                     meshData.quadIdentifiers[topWest] = new Vector2(quadCenterX, quadCenterY);
 
-                    meshData.vertices[topSouth] = new Vector3(topLeftX + x + meshSimplificationIncrement, 10, topLeftZ - y - meshSimplificationIncrement);
+                    meshData.vertices[topSouth] = new Vector3(topLeftX + x + meshSimplificationIncrement, topVerticesHeight, topLeftZ - y - meshSimplificationIncrement);
                     meshData.uvs[topSouth] = new Vector2((x + meshSimplificationIncrement) / (float)mapWidthHeight, (y - meshSimplificationIncrement) / (float)mapWidthHeight);
                     meshData.quadIdentifiers[topSouth] = new Vector2(quadCenterX, quadCenterY);
 
