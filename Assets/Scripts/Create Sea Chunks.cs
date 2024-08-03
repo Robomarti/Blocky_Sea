@@ -9,7 +9,7 @@ public class CreateSeaChunks : MonoBehaviour
     public static Vector2 viewerPosition;
     private int chunkSize;
     private int chunksVisibleInViewDistance;
-    private const float scale = 1f;
+    private const float scale = 1f; //  scale can be fine tuned to have different sized meshes
     private SeaChunk[] seaChunks;
 
     static SeaGenerator seaGenerator;
