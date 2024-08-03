@@ -1,24 +1,17 @@
+using System.Collections;
 using UnityEngine;
 
 public class Wind: MonoBehaviour
 {
     [SerializeField] private Vector2 windDirection;
     [SerializeField] private float windStrength;
+    [SerializeField] private float waveFrequency;
     [SerializeField] private RectTransform windDirectionImageTransform;
+    [SerializeField] private Material seaMaterial;
 
-        private void OnValidate() {
-        if (windDirection.x < -1) {
-            windDirection.x = -1;
-        }
-        if (windDirection.x > 1) {
-            windDirection.x = 1;
-        }
-        if (windDirection.y < -1) {
-            windDirection.y = -1;
-        }
-        if (windDirection.y > 1) {
-            windDirection.y = 1;
-        }
+    private void OnValidate() {
+        windDirection.x = Mathf.Clamp(windDirection.x, -1f, 1f);
+        windDirection.y = Mathf.Clamp(windDirection.y, -1f, 1f);
 
         // ensure that it is always just a little bit windy
         if (windDirection.x == 0) {
@@ -27,5 +20,13 @@ public class Wind: MonoBehaviour
         if (windDirection.y == 0) {
             windDirection.y = 0.1f;
         }
+
+        UpdateWindInfluence();
+    }
+
+    private void UpdateWindInfluence() {
+        seaMaterial.SetVector("_Wave_Direction", windDirection);
+        seaMaterial.SetFloat("_Wave_Strength", windStrength);
+        seaMaterial.SetFloat("_Wave_Frequency", waveFrequency);
     }
 }
