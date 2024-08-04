@@ -9,7 +9,8 @@ public class CreateSeaChunks : MonoBehaviour
     public static Vector2 viewerPosition;
     private int chunkSize;
     private int chunksVisibleInViewDistance;
-    private const float scale = 1f; //  scale can be fine tuned to have different sized meshes
+    [Tooltip("Scale can be fine tuned to have different sized meshes")]
+    [SerializeField] private float scale = 1f;
     private SeaChunk[] seaChunks;
 
     static SeaGenerator seaGenerator;
@@ -32,7 +33,7 @@ public class CreateSeaChunks : MonoBehaviour
         for (int yOffset = -chunksVisibleInViewDistance; yOffset <= chunksVisibleInViewDistance; yOffset++) {
             for (int xOffset = -chunksVisibleInViewDistance; xOffset <= chunksVisibleInViewDistance; xOffset++) {
                 Vector2 viewedChunkCoordinates = new Vector2(currentChunkXCoordinate + xOffset, currentChunkYCoordinate + yOffset);
-                SeaChunk seaChunk = new SeaChunk(viewedChunkCoordinates, chunkSize, transform, seaMaterial, detailLevels);
+                SeaChunk seaChunk = new SeaChunk(viewedChunkCoordinates, chunkSize, transform, seaMaterial, detailLevels, scale);
                 seaChunks[seaChunkCounter] = seaChunk;
                 seaChunkCounter += 1;
             }
@@ -50,7 +51,7 @@ public class CreateSeaChunks : MonoBehaviour
         private MeshFilter meshFilter;
         private int levelOfDetail = -1;
 
-        public SeaChunk(Vector2 coordinates, int size, Transform parent, Material material, LevelOfDetailInfo[] detailLevels) {
+        public SeaChunk(Vector2 coordinates, int size, Transform parent, Material material, LevelOfDetailInfo[] detailLevels, float chunkScale) {
             position = coordinates * size;
             bounds = new Bounds(position,Vector2.one * size);
             float viewerDistanceFromNearestEdge = Mathf.Sqrt(bounds.SqrDistance(viewerPosition));
@@ -62,7 +63,7 @@ public class CreateSeaChunks : MonoBehaviour
                 }
             }
 
-            if (levelOfDetail > 5 || levelOfDetail < 1) {
+            if (levelOfDetail > 5 || levelOfDetail < 0) {
                 levelOfDetail = detailLevels[^1].levelOfDetail;
             }
 
@@ -70,9 +71,9 @@ public class CreateSeaChunks : MonoBehaviour
             meshRenderer = meshObject.AddComponent<MeshRenderer>();
             meshFilter = meshObject.AddComponent<MeshFilter>();
             meshRenderer.material = material;
-            meshObject.transform.position = new Vector3(position.x, 0, position.y) * scale;
+            meshObject.transform.position = new Vector3(position.x, 0, position.y) * chunkScale;
             meshObject.transform.parent = parent;
-            meshObject.transform.localScale = Vector3.one * scale;
+            meshObject.transform.localScale = Vector3.one * chunkScale;
 
             CreateSeaMesh();
         }
