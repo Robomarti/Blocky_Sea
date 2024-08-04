@@ -3815,7 +3815,7 @@
     "m_Group": {
         "m_Id": "7d2b4e8e846c4fcfb86c192cae9b39bb"
     },
-    "m_Name": "SineWave",
+    "m_Name": "WaveHeight",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
@@ -3897,10 +3897,10 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "b1e44c86680a41efbb676b6b2e6fc61d",
     "m_Id": 1,
-    "m_DisplayName": "vertex_y_position",
+    "m_DisplayName": "Vertex_Y_Position",
     "m_SlotType": 1,
     "m_Hidden": false,
-    "m_ShaderOutputName": "vertex_y_position",
+    "m_ShaderOutputName": "Vertex_Y_Position",
     "m_StageCapability": 3,
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
