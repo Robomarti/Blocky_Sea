@@ -128,6 +128,9 @@
     "m_StickyNoteDatas": [
         {
             "m_Id": "f88c98182cd7499fa02e0eab00b10c49"
+        },
+        {
+            "m_Id": "1ab33eaf7015496691f386cf45a3b3fc"
         }
     ],
     "m_Edges": [
@@ -637,10 +640,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 36.0000114440918,
-            "y": -845.0,
-            "width": 143.00006103515626,
-            "height": 76.99993896484375
+            "x": 10.0,
+            "y": -844.0,
+            "width": 146.0,
+            "height": 77.0
         }
     },
     "m_Slots": [
@@ -772,6 +775,26 @@
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
     "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.StickyNoteData",
+    "m_ObjectId": "1ab33eaf7015496691f386cf45a3b3fc",
+    "m_Title": "",
+    "m_Content": "The shader is adapted from the formula from this video: https://www.youtube.com/watch?v=PH9q0HNBjT4&t=1026s",
+    "m_TextSize": 0,
+    "m_Theme": 0,
+    "m_Position": {
+        "serializedVersion": "2",
+        "x": -1807.0,
+        "y": -1004.0,
+        "width": 200.0,
+        "height": 160.0
+    },
+    "m_Group": {
+        "m_Id": ""
+    }
 }
 
 {
@@ -1890,9 +1913,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -409.0,
-            "y": -943.9999389648438,
-            "width": 126.00006103515625,
+            "x": -405.0,
+            "y": -920.0,
+            "width": 126.0,
             "height": 118.0
         }
     },
@@ -2958,9 +2981,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -406.9999694824219,
-            "y": -1051.0,
-            "width": 124.00003051757813,
+            "x": -403.0,
+            "y": -1035.0,
+            "width": 124.0,
             "height": 34.0
         }
     },
@@ -3081,10 +3104,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -422.0,
-            "y": -982.9999389648438,
-            "width": 136.00006103515626,
-            "height": 33.99993896484375
+            "x": -418.0,
+            "y": -967.0,
+            "width": 136.0,
+            "height": 34.0
         }
     },
     "m_Slots": [
@@ -3242,7 +3265,7 @@
         "m_Position": {
             "serializedVersion": "2",
             "x": -549.0,
-            "y": -879.0,
+            "y": -845.0,
             "width": 140.0,
             "height": 34.0
         }
@@ -3378,10 +3401,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -411.0,
-            "y": -1017.0,
-            "width": 128.00006103515626,
-            "height": 34.00006103515625
+            "x": -407.0,
+            "y": -1001.0,
+            "width": 128.0,
+            "height": 34.0
         }
     },
     "m_Slots": [
