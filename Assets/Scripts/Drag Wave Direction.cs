@@ -36,6 +36,7 @@ public class DragWaveDirection : MonoBehaviour, IBeginDragHandler, IDragHandler
             transform.rotation = dragStartRotation * Quaternion.Euler(-360 * (currentDistanceBetweenMousePositions / screenWidth) * Vector3.forward);
             float zAngle = transform.rotation.eulerAngles.z;
             Vector2 rotationToVector2 = new Vector2(Mathf.Sin(zAngle * Mathf.Deg2Rad), Mathf.Cos(zAngle * Mathf.Deg2Rad));
+            rotationToVector2.y *= -1f;
             waveManager.WaveDirection = rotationToVector2;
         }
     }
