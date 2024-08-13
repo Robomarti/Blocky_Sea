@@ -4,12 +4,14 @@ public class WaveManager : MonoBehaviour
 {
     [SerializeField] private float smoothingIterations;
     [SerializeField] private Vector2 waveDirection;
+    public Vector2 WaveDirection {
+        set { waveDirection = value; UpdateWindInfluence(); }
+    }
     [SerializeField] private float waveSpeed;
     [SerializeField] private float waveAmplitude;
     [SerializeField] private float wavePersistence;
     [SerializeField] private float wavePeriod;
     [SerializeField] private float waveLacunarity;
-    [SerializeField] private RectTransform windDirectionImageTransform;
     [SerializeField] private Material seaMaterial;
 
     private void OnValidate() {

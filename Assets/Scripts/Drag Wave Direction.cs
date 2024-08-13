@@ -12,6 +12,8 @@ public class DragWaveDirection : MonoBehaviour, IBeginDragHandler, IDragHandler
     private Vector2 dragStartPosition;
     private Quaternion dragStartRotation;
 
+    [SerializeField] private WaveManager waveManager;
+
     private void Awake() {
         draggableObject = transform as RectTransform;
     }
@@ -31,7 +33,10 @@ public class DragWaveDirection : MonoBehaviour, IBeginDragHandler, IDragHandler
         if (RectTransformUtility.ScreenPointToWorldPointInRectangle(draggableObject, eventData.position, eventData.pressEventCamera, out var globalMousePosition)) {
             
             float currentDistanceBetweenMousePositions = globalMousePosition.x - dragStartPosition.x;
-            transform.rotation = dragStartRotation * Quaternion.Euler(Vector3.forward * (currentDistanceBetweenMousePositions / screenWidth) * -360);
+            transform.rotation = dragStartRotation * Quaternion.Euler(-360 * (currentDistanceBetweenMousePositions / screenWidth) * Vector3.forward);
+            float zAngle = transform.rotation.eulerAngles.z;
+            Vector2 rotationToVector2 = new Vector2(Mathf.Sin(zAngle * Mathf.Deg2Rad), Mathf.Cos(zAngle * Mathf.Deg2Rad));
+            waveManager.WaveDirection = rotationToVector2;
         }
     }
 }
