@@ -38,16 +38,33 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Color_Strength: 1
+    - _Deep_Water_Depth: 1
     - _Depth: -5.58
+    - _Float: 0
+    - _Foam_Percent: 0
+    - _Iterations: 1
+    - _Lacunarity: 2
     - _Lower_vertices_Height: 0.1
+    - _Minimum_Wave_Height: 1
+    - _Persistance: 0.1
+    - _Persistence: 0.5
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Smoothness: 0.9
     - _Strength: 0.064
-    - _Wave_Speed: 1.95
-    - _Wave_Strength: 5
+    - _Wave_Amplitude: 0.5
+    - _Wave_Frequency: 1
+    - _Wave_Length: 0.5
+    - _Wave_Period: 6
+    - _Wave_Speed: 100
+    - _Wave_Strength: 0.21
+    - _Wave_X_Direction: 0
+    - _Wave_Y_Direction: -1
     m_Colors:
-    - _Deep_Water_Color: {r: 0.04579027, g: 0.23396, b: 0.46226406, a: 0.9490196}
-    - _Shallow_Water_Color: {r: 0.10791194, g: 0.8532529, b: 0.9150943, a: 0.7882353}
+    - _Deep_Water_Color: {r: 0.045790248, g: 0.23395997, b: 0.462264, a: 0.8784314}
+    - _Foam_Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Shallow_Water_Color: {r: 0.10791191, g: 0.8532529, b: 0.9150943, a: 0.5686275}
     - _Wave_Direction: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
