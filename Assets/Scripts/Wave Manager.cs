@@ -42,4 +42,8 @@ public class WaveManager : MonoBehaviour
     private void UpdateSeaOffset() {
         seaMaterial.SetVector("_Sea_Offset", seaOffset);
     }
+
+    private void Start() {
+        seaMaterial.SetVector("_Sea_Offset", new Vector2(0,0));
+    }
 }

@@ -59,9 +59,9 @@ Material:
     - _Wave_Period: 6
     - _Wave_Speed: 100
     - _Wave_Strength: 0.21
-    - _Wave_X_Direction: -0.02762664
+    - _Wave_X_Direction: -0.26481897
     - _Wave_Y_Direction: -1
-    - _Wave_Z_Direction: -0.9996183
+    - _Wave_Z_Direction: 0.9642981
     m_Colors:
     - _Deep_Water_Color: {r: 0.045790248, g: 0.23395997, b: 0.462264, a: 0.8784314}
     - _Foam_Color: {r: 1, g: 1, b: 1, a: 1}
