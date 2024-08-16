@@ -65,7 +65,7 @@ Material:
     m_Colors:
     - _Deep_Water_Color: {r: 0.045790248, g: 0.23395997, b: 0.462264, a: 0.8784314}
     - _Foam_Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Sea_Offset: {r: 73, g: 7, b: 0, a: 0}
+    - _Sea_Offset: {r: 18, g: -5, b: 0, a: 0}
     - _Shallow_Water_Color: {r: 0.10791191, g: 0.8532529, b: 0.9150943, a: 0.5686275}
     - _Wave_Direction: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
