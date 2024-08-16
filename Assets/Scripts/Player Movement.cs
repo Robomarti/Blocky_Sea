@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     private float lastFullZCoordinate;
 
     private bool needToUpdateSeaChunkPosition = false;
+    [SerializeField] private WaveManager waveManager;
 
     private void Update() {
         movementDirection = movement.action.ReadValue<Vector2>();
@@ -27,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (needToUpdateSeaChunkPosition) {
             seaChunksParent.position = new Vector3(lastFullXCoordinate, seaChunksParent.position.y, lastFullZCoordinate);
+            waveManager.SeaOffset = new Vector2(lastFullXCoordinate, lastFullZCoordinate);
         }
     }
 }

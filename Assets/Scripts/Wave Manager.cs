@@ -5,7 +5,7 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private float smoothingIterations;
     [SerializeField] private Vector2 waveDirection;
     public Vector2 WaveDirection {
-        set { waveDirection = value; UpdateWindInfluence(); }
+        set { waveDirection = value; UpdateWaveDirection(); }
     }
     [SerializeField] private float waveSpeed;
     [SerializeField] private float waveAmplitude;
@@ -13,6 +13,10 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private float wavePeriod;
     [SerializeField] private float waveLacunarity;
     [SerializeField] private Material seaMaterial;
+    [SerializeField] private Vector2 seaOffset;
+    public Vector2 SeaOffset {
+        set { seaOffset = value; UpdateSeaOffset(); }
+    }
 
     private void OnValidate() {
         waveDirection.x = Mathf.Clamp(waveDirection.x, -1f, 1f);
@@ -24,11 +28,18 @@ public class WaveManager : MonoBehaviour
     private void UpdateWindInfluence() {
         seaMaterial.SetFloat("_Iterations", smoothingIterations);
         seaMaterial.SetFloat("_Wave_Speed", waveSpeed);
-        seaMaterial.SetFloat("_Wave_X_Direction", waveDirection.x);
-        seaMaterial.SetFloat("_Wave_Y_Direction", waveDirection.y);
         seaMaterial.SetFloat("_Wave_Amplitude", waveAmplitude);
         seaMaterial.SetFloat("_Persistence", wavePersistence);
         seaMaterial.SetFloat("_Wave_Period", wavePeriod);
         seaMaterial.SetFloat("_Lacunarity", waveLacunarity);
+    }
+
+    private void UpdateWaveDirection() {
+        seaMaterial.SetFloat("_Wave_X_Direction", waveDirection.x);
+        seaMaterial.SetFloat("_Wave_Z_Direction", waveDirection.y);
+    }
+
+    private void UpdateSeaOffset() {
+        seaMaterial.SetVector("_Sea_Offset", seaOffset);
     }
 }
