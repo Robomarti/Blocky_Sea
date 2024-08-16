@@ -17,6 +17,8 @@ public class WaveManager : MonoBehaviour
     public Vector2 SeaOffset {
         set { seaOffset = value; UpdateSeaOffset(); }
     }
+    [SerializeField] [Range(1,100)] private float randomnessChance;
+    [SerializeField] private float randomnessStrength;
 
     private void OnValidate() {
         waveDirection.x = Mathf.Clamp(waveDirection.x, -1f, 1f);
@@ -32,6 +34,8 @@ public class WaveManager : MonoBehaviour
         seaMaterial.SetFloat("_Persistence", wavePersistence);
         seaMaterial.SetFloat("_Wave_Period", wavePeriod);
         seaMaterial.SetFloat("_Lacunarity", waveLacunarity);
+        seaMaterial.SetFloat("_Randomness_Chance", randomnessChance);
+        seaMaterial.SetFloat("_Randomness_Strength", randomnessStrength);
     }
 
     private void UpdateWaveDirection() {

@@ -51,6 +51,8 @@ Material:
     - _Persistence: 0.5
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Randomness_Chance: 10
+    - _Randomness_Strength: 1
     - _Smoothness: 0.9
     - _Strength: 0.064
     - _Wave_Amplitude: 0.5
@@ -59,13 +61,13 @@ Material:
     - _Wave_Period: 6
     - _Wave_Speed: 100
     - _Wave_Strength: 0.21
-    - _Wave_X_Direction: -0.26481897
+    - _Wave_X_Direction: -0.23539266
     - _Wave_Y_Direction: -1
-    - _Wave_Z_Direction: 0.9642981
+    - _Wave_Z_Direction: -0.97190034
     m_Colors:
     - _Deep_Water_Color: {r: 0.045790248, g: 0.23395997, b: 0.462264, a: 0.8784314}
     - _Foam_Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Sea_Offset: {r: 18, g: -5, b: 0, a: 0}
+    - _Sea_Offset: {r: 17, g: 2, b: 0, a: 0}
     - _Shallow_Water_Color: {r: 0.10791191, g: 0.8532529, b: 0.9150943, a: 0.5686275}
     - _Wave_Direction: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
