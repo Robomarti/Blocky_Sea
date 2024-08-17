@@ -4,16 +4,20 @@ using UnityEditor;
 [CustomEditor(typeof(SeaGenerator))]
 public class SeaGeneratorEditor : Editor {
     public override void OnInspectorGUI() {
-        SeaGenerator seaGeneration = (SeaGenerator)target;
+        SeaGenerator seaGenerator = (SeaGenerator)target;
 
         if (DrawDefaultInspector()) {
-            if (seaGeneration.autoUpdate) {
-                seaGeneration.DrawSeaInEditor();
+            if (seaGenerator.autoUpdate) {
+                seaGenerator.DrawSeaInEditor();
             }
         }
 
         if (GUILayout.Button("Generate sea")) {
-            seaGeneration.DrawSeaInEditor();
+            seaGenerator.DrawSeaInEditor();
+        }
+
+        if (GUILayout.Button("Create Sea Chunk GameObject")) {
+            seaGenerator.CreateSeaGameObject();
         }
     }
 }

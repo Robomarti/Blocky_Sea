@@ -6,7 +6,7 @@ public static class SeaMeshGenerator {
         float topLeftX = (mapWidthHeight - 1) / -2f;
         float topLeftZ = (mapWidthHeight - 1) / 2f;
 
-        //lod can't be 5 due to most ChunkSize values not being divisible by 10
+        // LOD can't be 5 due to most ChunkSize values not being divisible by 10
         if (levelOfDetail == 5) {
             levelOfDetail = 6;
         }
@@ -40,7 +40,7 @@ public static class SeaMeshGenerator {
         int firstUpperLayerVertexIndex = vertexIndex;
         meshData.firstUpperLayerVertexIndex = firstUpperLayerVertexIndex;
 
-        //we can think of upper layer lines either as 2 as long with 1 extra line between lines, or simply as 4 times as long as lower layer lines
+        //we can think of upper layer rows either as twice as long with 1 extra row between rows, or simply as 4 times as long as lower layer rows
         int upperLayerVerticesPerLine = verticesPerLine * 4;
         meshData.upperLayerVerticesPerLine = upperLayerVerticesPerLine;
 
@@ -122,7 +122,6 @@ public class MeshData {
     public MeshData(int verticesPerLine) {
         int spaceToAllocateToLowerLayer = verticesPerLine * verticesPerLine;
         // We generate upper vertices on top of the regular vertices, and upper layer has 4 times the amount of vertices to keep each quad completely independent
-        // We generate useless additional vertices for corner and edge parts of the mesh because coding hard :(.
         // Upper layer has twice the amount of vertices horizontally and twice the amount of vertices vertically
         int spaceToAllocateToUpperLayer = 2 * verticesPerLine * 2 * verticesPerLine;
         int spaceToAllocate = spaceToAllocateToLowerLayer + spaceToAllocateToUpperLayer;

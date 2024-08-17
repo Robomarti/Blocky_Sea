@@ -16,6 +16,10 @@ public class SeaGenerator : MonoBehaviour {
     [SerializeField] private float topVerticesHeight;
     public bool autoUpdate;
 
+    [SerializeField] private Material seaMaterial;
+    [SerializeField] private Vector3 seaChunkLocation;
+    [SerializeField] private float meshSize;
+
     private Queue<SeaThreadInfo<MeshData>> meshDataThreadInfoQueue = new Queue<SeaThreadInfo<MeshData>>();
 
     public void DrawSeaInEditor() {
@@ -25,6 +29,20 @@ public class SeaGenerator : MonoBehaviour {
             Mesh mesh = seaMesh.CreateMesh();
             displaySea.DrawMesh(mesh);
         }
+    }
+
+    public void CreateSeaGameObject() {
+        
+        GameObject meshObject = new GameObject("Sea chunk, level of detail: " + EditorPreviewLevelOfDetail.ToString());
+        MeshRenderer meshRenderer = meshObject.AddComponent<MeshRenderer>();
+        MeshFilter meshFilter = meshObject.AddComponent<MeshFilter>();
+        meshRenderer.material = seaMaterial;
+        meshObject.transform.position = seaChunkLocation;
+        meshObject.transform.parent = transform;
+        meshObject.transform.localScale = Vector3.one * meshSize;
+
+        MeshData seaMesh = SeaMeshGenerator.GenerateSeaMesh((int)seaChunkSize, EditorPreviewLevelOfDetail, topVerticesHeight);
+        meshFilter.mesh = seaMesh.CreateMesh();
     }
 
     public void RequestMeshData(Action<MeshData> callback, int levelOfDetail) {
