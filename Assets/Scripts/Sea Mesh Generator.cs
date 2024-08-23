@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 public static class SeaMeshGenerator {
-    public static MeshData GenerateSeaMesh(int mapWidthHeight, int levelOfDetail, float topVerticesHeight) {
+    public static MeshData GenerateSeaMesh(int mapWidthHeight, int levelOfDetail, int triangleGenerationMode, bool renderLowerTriangles, float topVerticesHeight) {
         float topLeftX = (mapWidthHeight - 1) / -2f;
         float topLeftZ = (mapWidthHeight - 1) / 2f;
 
@@ -23,14 +23,16 @@ public static class SeaMeshGenerator {
                 meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, 0, topLeftZ - y);
                 meshData.uvs[vertexIndex] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
 
-                int lowNorth = vertexIndex;
-                int lowEast = vertexIndex + 1;
-                int lowWest = verticesPerLine + vertexIndex;
-                int lowSouth = verticesPerLine + vertexIndex + 1;
+                if (renderLowerTriangles) {
+                    int lowNorth = vertexIndex;
+                    int lowEast = vertexIndex + 1;
+                    int lowWest = verticesPerLine + vertexIndex;
+                    int lowSouth = verticesPerLine + vertexIndex + 1;
 
-                if (x < mapWidthHeight - 1 && y < mapWidthHeight - 1) {
-                    meshData.AddTriangle(lowNorth, lowSouth, lowWest);
-                    meshData.AddTriangle(lowSouth, lowNorth, lowEast);
+                    if (x < mapWidthHeight - 1 && y < mapWidthHeight - 1) {
+                        meshData.AddTriangle(lowNorth, lowSouth, lowWest);
+                        meshData.AddTriangle(lowSouth, lowNorth, lowEast);
+                    }
                 }
 
                 vertexIndex += 1;
@@ -81,23 +83,29 @@ public static class SeaMeshGenerator {
                     int lowWest = verticesPerLine + lowNorthVertexIndex;
                     int lowSouth = verticesPerLine + lowNorthVertexIndex + 1;
 
-                    // Top triangles
+                    // Top triangles, up facing
                     meshData.AddTriangle(topNorth, topSouth, topWest);
                     meshData.AddTriangle(topSouth, topNorth, topEast);
 
-                    // Northeast triangles
-                    meshData.AddTriangle(topEast, lowNorth, lowEast);
-                    meshData.AddTriangle(lowNorth, topEast, topNorth);
+                    // Northeast triangles, back facing
+                    if (triangleGenerationMode == 3) {
+                        meshData.AddTriangle(topEast, lowNorth, lowEast);
+                        meshData.AddTriangle(lowNorth, topEast, topNorth);
+                    }
 
-                    // Northwest triangles
-                    meshData.AddTriangle(topNorth, lowWest, lowNorth);
-                    meshData.AddTriangle(lowWest, topNorth, topWest);
+                    // Northwest triangles, left facing
+                    if (triangleGenerationMode != 1) {
+                        meshData.AddTriangle(topNorth, lowWest, lowNorth);
+                        meshData.AddTriangle(lowWest, topNorth, topWest);
+                    }
 
-                    // Southeast triangles
-                    meshData.AddTriangle(topSouth, lowEast, lowSouth);
-                    meshData.AddTriangle(lowEast, topSouth, topEast);
+                    // Southeast triangles, right facing
+                    if (triangleGenerationMode != 1) {
+                        meshData.AddTriangle(topSouth, lowEast, lowSouth);
+                        meshData.AddTriangle(lowEast, topSouth, topEast);
+                    }
 
-                    // Southwest triangles
+                    // Southwest triangles, front facing
                     meshData.AddTriangle(topWest, lowSouth, lowWest);
                     meshData.AddTriangle(lowSouth, topWest, topSouth);
                 }
