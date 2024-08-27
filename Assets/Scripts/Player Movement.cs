@@ -26,9 +26,6 @@ public class PlayerMovement : MonoBehaviour
         transform.position += movementSpeed * Time.deltaTime * new Vector3(movementDirection.x, 0, movementDirection.y);
 
         // Sea chunks movement.
-        // We check if the difference in position is larger than largestLevelOfDetail+1 
-        // because cubes of a LOD largestLevelOfDetail chunk are largestLevelOfDetail+1 times larger than
-        // cubes of a LOD 0 chunk
         if (Mathf.Abs(Mathf.Floor(transform.position.x) - lastFullXCoordinate) >= largestLevelOfDetail+1) {
             lastFullXCoordinate = Mathf.Floor(transform.position.x);
             needToUpdateSeaChunkPosition = true;

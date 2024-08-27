@@ -31,7 +31,6 @@ public class DragWaveDirection : MonoBehaviour, IBeginDragHandler, IDragHandler
     public void OnDrag(PointerEventData eventData)
     {
         if (RectTransformUtility.ScreenPointToWorldPointInRectangle(draggableObject, eventData.position, eventData.pressEventCamera, out var globalMousePosition)) {
-            
             float currentDistanceBetweenMousePositions = globalMousePosition.x - dragStartPosition.x;
             transform.rotation = dragStartRotation * Quaternion.Euler(-360 * (currentDistanceBetweenMousePositions / screenWidth) * Vector3.forward);
             float zAngle = transform.rotation.eulerAngles.z;
