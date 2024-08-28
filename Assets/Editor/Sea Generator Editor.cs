@@ -12,11 +12,11 @@ public class SeaGeneratorEditor : Editor {
             }
         }
 
-        if (GUILayout.Button("Generate sea")) {
+        if (GUILayout.Button("Update SeaMesh Object")) {
             seaGenerator.DrawSeaInEditor();
         }
 
-        if (GUILayout.Button("Create Sea Chunk GameObject")) {
+        if (GUILayout.Button("Create A New Sea Chunk Object")) {
             seaGenerator.CreateSeaGameObject();
         }
     }

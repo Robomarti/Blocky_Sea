@@ -23,13 +23,13 @@ public static class SeaMeshGenerator {
                 meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, 0, topLeftZ - y);
                 meshData.uvs[vertexIndex] = new Vector2(x / (float)mapWidthHeight, y / (float)mapWidthHeight);
 
-                if (renderLowerTriangles) {
-                    int lowNorth = vertexIndex;
-                    int lowEast = vertexIndex + 1;
-                    int lowWest = verticesPerLine + vertexIndex;
-                    int lowSouth = verticesPerLine + vertexIndex + 1;
-
+                if (renderLowerTriangles) { 
                     if (x < mapWidthHeight - 1 && y < mapWidthHeight - 1) {
+                        int lowNorth = vertexIndex;
+                        int lowEast = vertexIndex + 1;
+                        int lowWest = verticesPerLine + vertexIndex;
+                        int lowSouth = verticesPerLine + vertexIndex + 1;
+
                         meshData.AddTriangle(lowNorth, lowSouth, lowWest);
                         meshData.AddTriangle(lowSouth, lowNorth, lowEast);
                     }

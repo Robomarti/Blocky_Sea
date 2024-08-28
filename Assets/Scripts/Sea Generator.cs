@@ -13,17 +13,18 @@ public class SeaGenerator : MonoBehaviour {
     }
     public ChunkSize seaChunkSize;
 
+    private const string generationModeToolTip = "Front_And_Up - The fastest option, but the mesh can only be viewed from the front."+
+    "Front_Left_Right_Up - Generates all the faces for the cube except the back ones. The Mesh can be rotated when the player rotates to hide this."+
+    "All - Generates all the faces normally, but the additional triangles slow down rendering.";
     public enum TriangleGenerationMode {
         Front_And_Up = 1,
         Front_Left_Right_Up = 2,
         All = 3
     }
-    [Tooltip(@"Front_And_Up - The fastest option, but the mesh can only be viewed from the front. 
-Front_Left_Right_Up - Generates all the faces for the cube except the back ones. The Mesh can be rotated when the player rotates to hide this.
-All - Generates all the faces normally, but the additional triangles slow down rendering.")]
+    [Tooltip(generationModeToolTip)]
     [SerializeField] private TriangleGenerationMode triangleGenerationMode;
 
-    [Tooltip("Whether to generate triangles of the bottoms of the cube. They are likely not needed in most use cases.")]
+    [Tooltip("Whether to generate triangles of the bottoms of the cube. They are likely not needed in most cases.")]
     [SerializeField] private bool generateLowerTriangles;
 
     [Range(0,5)] public int EditorPreviewLevelOfDetail;
