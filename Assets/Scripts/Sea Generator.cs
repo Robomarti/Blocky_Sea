@@ -24,7 +24,7 @@ All - Generates all the faces normally, but the additional triangles slow down r
     [SerializeField] private TriangleGenerationMode triangleGenerationMode;
 
     [Tooltip("Whether to generate triangles of the bottoms of the cube. They are likely not needed in most use cases.")]
-    [SerializeField] private bool renderLowerTriangles;
+    [SerializeField] private bool generateLowerTriangles;
 
     [Range(0,5)] public int EditorPreviewLevelOfDetail;
     [SerializeField] private float topVerticesHeight;
@@ -39,7 +39,7 @@ All - Generates all the faces normally, but the additional triangles slow down r
     public void DrawSeaInEditor() {
         DisplaySea displaySea = FindAnyObjectByType<DisplaySea>();
         if (drawMode == DrawMode.Mesh) {
-            MeshData seaMesh = SeaMeshGenerator.GenerateSeaMesh((int)seaChunkSize, EditorPreviewLevelOfDetail, (int)triangleGenerationMode, renderLowerTriangles, topVerticesHeight);
+            MeshData seaMesh = SeaMeshGenerator.GenerateSeaMesh((int)seaChunkSize, EditorPreviewLevelOfDetail, (int)triangleGenerationMode, generateLowerTriangles, topVerticesHeight);
             Mesh mesh = seaMesh.CreateMesh();
             displaySea.DrawMesh(mesh);
         }
@@ -54,7 +54,7 @@ All - Generates all the faces normally, but the additional triangles slow down r
         meshObject.transform.parent = transform;
         meshObject.transform.localScale = Vector3.one * meshSize;
 
-        MeshData seaMesh = SeaMeshGenerator.GenerateSeaMesh((int)seaChunkSize, EditorPreviewLevelOfDetail, (int)triangleGenerationMode, renderLowerTriangles, topVerticesHeight);
+        MeshData seaMesh = SeaMeshGenerator.GenerateSeaMesh((int)seaChunkSize, EditorPreviewLevelOfDetail, (int)triangleGenerationMode, generateLowerTriangles, topVerticesHeight);
         meshFilter.mesh = seaMesh.CreateMesh();
     }
 
@@ -67,7 +67,7 @@ All - Generates all the faces normally, but the additional triangles slow down r
     }
 
     private void MeshDataThread(Action<MeshData> callback, int levelOfDetail) {
-        MeshData meshData = SeaMeshGenerator.GenerateSeaMesh((int)seaChunkSize, levelOfDetail, (int)triangleGenerationMode, renderLowerTriangles, topVerticesHeight);
+        MeshData meshData = SeaMeshGenerator.GenerateSeaMesh((int)seaChunkSize, levelOfDetail, (int)triangleGenerationMode, generateLowerTriangles, topVerticesHeight);
         lock (meshDataThreadInfoQueue) {
             meshDataThreadInfoQueue.Enqueue(new SeaThreadInfo<MeshData>(callback, meshData));
         }

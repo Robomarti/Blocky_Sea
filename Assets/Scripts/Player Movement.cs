@@ -13,11 +13,13 @@ public class PlayerMovement : MonoBehaviour
 
     private bool needToUpdateSeaChunkPosition = false;
     [SerializeField] private WaveManager waveManager;
-    private int largestLevelOfDetail = -1;
+    private int largestLevelOfDetail = 6;
+    private int movementIncrement;
 
     private void Start() {
         GameObject seaManager = GameObject.Find("Sea Manager");
         largestLevelOfDetail = seaManager.GetComponent<CreateSeaChunks>().detailLevels[^1].levelOfDetail;
+        movementIncrement = (largestLevelOfDetail == 0) ? 1 : largestLevelOfDetail * 2;
     }
 
     private void Update() {
@@ -26,11 +28,11 @@ public class PlayerMovement : MonoBehaviour
         transform.position += movementSpeed * Time.deltaTime * new Vector3(movementDirection.x, 0, movementDirection.y);
 
         // Sea chunks movement.
-        if (Mathf.Abs(Mathf.Floor(transform.position.x) - lastFullXCoordinate) >= largestLevelOfDetail+1) {
+        if (Mathf.Abs(Mathf.Floor(transform.position.x) - lastFullXCoordinate) >= movementIncrement) {
             lastFullXCoordinate = Mathf.Floor(transform.position.x);
             needToUpdateSeaChunkPosition = true;
         }
-        if (Mathf.Abs(Mathf.Floor(transform.position.z) - lastFullZCoordinate) >= largestLevelOfDetail+1) {
+        if (Mathf.Abs(Mathf.Floor(transform.position.z) - lastFullZCoordinate) >= movementIncrement) {
             lastFullZCoordinate = Mathf.Floor(transform.position.z);
             needToUpdateSeaChunkPosition = true;
         }
