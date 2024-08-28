@@ -1,10 +1,40 @@
 # Retrospective
 
+This document notes what I learned during the project and what I would do differently. It also contains a list of
+things I would add if I had to continue this project.
+
+
 ## What I learned
+
+Firstly and most importantly I learned how mesh generation works in Unity. I learned the limits of mesh generation (for example a limit for the amount of vertices
+a single mesh can have), as well as how shaders work in Unity and in general. I learned that while writing purely HLSL code for shaders is not banned by Unity, it is also
+not very easy to implement, since Unity makes it pretty complicated. Unity seems to strongly want everyone to use Shader Graph. I also learned how to create shaders with Shader Graph,
+and how to optimize shaders and which aspects affect shader performance.
+
+My logical thinking and problem solving ability both improved during this project, since I have had many problems due to not having any knowledge of shaders or mesh
+generation prior to this project. For example, Unity doesn't print an error if you try to create a triangle with a vertex which index is outside of the vertices array.
+What I think happens instead is that Unity will create the triangle but connect it to one of the first vertices of the array. The end result looks weird, and only extensive
+testing revealed that the sea chunk sizes were too large.
+
 
 ## Further development
 
+Here is a list of further development that I would do if I had to continue this project.
+
+
+### Unjittering sea chunk movement
+
+Currently the sea chunk movement can look a bit janky when looking at two sea chunks of different level of detail. Because cubes / blocks of
+different levels of detail are different sizes, I think they should be moved at different times for the movement to look smoother.
+I had implemented a system of sea chunks of different levels of detail having different parents, so that the player could move
+only the relevant sea chunks, but I scrapped it from the project because in the end it didn't look good because it left gaps between sea chunks of
+different levels of detail.
+
+
 ### Sea Foam
+
+I never had the time to add a sea foam effect, since I couldn't think of a nice formula for it since it is a bit complicated how sea foam forms in nature.
+I tried to make a formula that displays a white color when the wave is in its maximum height, but did not work and got too complicated and messy to try to fix.
 
 
 ### Optimizing the mesh
