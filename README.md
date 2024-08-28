@@ -8,7 +8,7 @@ https://youtu.be/Dww_efsTeRw
 This is a template of one way to achieve voxelized sea mesh. It is pretty unoptimized since I was a total beginner in shaders and mesh generation before this project, 
 but since this project is licenced as The Unlicence, you are free to contribute to this project or just copy paste the code and optimize it in your project.
 
-Developed in Unity 6 Preview, version 6000.0.
+Developed in Unity 6 Preview, version 6000.0. The project uses Universal RP 17.0.3, Cinemachine 3.1.1 and Input System 1.8.2 packages.
 
 A guide document of how this project works can be found [here](https://github.com/Robomarti/Blocky_Sea/blob/main/documentation/howEverythingWorks.md).
 
