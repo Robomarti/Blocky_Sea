@@ -20,6 +20,9 @@ public class PlayerMovement : MonoBehaviour
         GameObject seaManager = GameObject.Find("Sea Manager");
         largestLevelOfDetail = seaManager.GetComponent<CreateSeaChunks>().detailLevels[^1].levelOfDetail;
         movementIncrement = (largestLevelOfDetail == 0) ? 1 : largestLevelOfDetail * 2;
+        lastFullXCoordinate = Mathf.Floor(transform.position.x);
+        lastFullZCoordinate = Mathf.Floor(transform.position.z);
+        waveManager.SeaOffset = new Vector2(lastFullXCoordinate, lastFullZCoordinate);
     }
 
     private void Update() {
