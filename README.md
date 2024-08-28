@@ -5,6 +5,10 @@ but since this project is licenced as The Unlicence, you are free to contribute 
 
 Developed in Unity 6 Preview, version 6000.0.
 
+A guide document of how this project works can be found ![here](https://github.com/Robomarti/Blocky_Sea/blob/main/documentation/howEverythingWorks.md).
+
+A document containing retrospective thoughts can be found ![here](https://github.com/Robomarti/Blocky_Sea/blob/main/documentation/retrospective.md).
+
 This project is heavily based on Sebastian Lague's ([SebLague](https://github.com/SebLague)) Procedural Terrain Generation tutorial series, which you can watch here: https://www.youtube.com/playlist?list=PLFt_AvWsXl0eBW2EiBtl_sxmDtSgZBxB3
 
 Many thanks to him.
