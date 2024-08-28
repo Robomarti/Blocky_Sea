@@ -1,8 +1,6 @@
 # Blocky Sea
 
-A quick demo of the shader and the generated mesh.
-
-https://github.com/Robomarti/Blocky_Sea/blob/main/documentation/videos/blockySea.mp4
+A quick demo of the shader and the generated mesh can be downloaded from ![here](https://youtu.be/Dww_efsTeRw).
 
 
 This is a template of one way to achieve voxelized sea mesh. It is pretty unoptimized since I was a total beginner in shaders and mesh generation before this project, 
