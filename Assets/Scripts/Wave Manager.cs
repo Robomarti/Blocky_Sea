@@ -48,6 +48,6 @@ public class WaveManager : MonoBehaviour
     }
 
     private void Start() {
-        seaMaterial.SetVector("_Sea_Offset", new Vector2(0,0));
+        seaMaterial.SetVector("_Sea_Offset", new Vector2(0,-1));
     }
 }
