@@ -1,5 +1,7 @@
 # Blocky Sea
 
+![Screenshot of the project](https://github.com/Robomarti/Blocky_Sea/blob/main/documentation/Images/InitialWindDirection.png)
+
 A quick demo of the shader and the generated mesh:
 
 https://youtu.be/Dww_efsTeRw
